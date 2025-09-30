@@ -3,6 +3,8 @@
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { getHome } from '@/api/get-home'
+import { getCategory } from '@/api/get-category'
+import { getDetailManga } from '@/api/get-detail-manga'
 
 // page này là home mẫu thôi, xóa hết làm lại cũng dc, file này giải thích cách fetch api
 // do có cái thanh navbar nên phải padding top xuống
@@ -10,7 +12,8 @@ import { getHome } from '@/api/get-home'
 
 export default function MangaPage() {
   const { data: mangas, isLoading, error } = useQuery(getHome())
-
+  const dataTest1 = useQuery(getCategory())
+  const dataTest2 = useQuery(getDetailManga({slug:"dao-hai-tac"}))
   // chỗ này có thể viết sẵn 2 cái component loading với error để xài mấy chỗ khác
   if (isLoading) return <div>Loading...</div>
   if (error || mangas?.status !== 'success') return <div>Error: {(error as Error).message}</div>
@@ -21,7 +24,7 @@ export default function MangaPage() {
       <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
         {mangas?.data?.items.map(manga => {
           const src = mangas.data.APP_DOMAIN_CDN_IMAGE + '/uploads/comics/' + manga.thumb_url
-          console.log(src)
+          // console.log(src)
 
           return (
             <div key={manga._id} className='border rounded-lg p-2 shadow hover:shadow-md transition'>
