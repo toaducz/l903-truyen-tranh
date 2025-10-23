@@ -2,7 +2,27 @@ import { ResponseData, BaseData } from './common/response'
 import { request } from '@/utils/request'
 import { otruyen } from '@/utils/env'
 import { queryOptions } from '@tanstack/react-query'
-import { Manga } from './common/type'
+import { Category, Chapter } from './common/type'
+
+type Chapters = {
+    server_name: string
+    server_data: Chapter[]
+}
+
+export interface DetailManga {
+  _id: string
+  name: string
+  slug: string
+  origin_name: string[]
+  content: string
+  status: string
+  thumb_url: string
+  sub_docquyen: boolean
+  author: string
+  category: Category[]
+  chapters: Chapters[]
+  updatedAt: string // ISO date
+}
 
 type Params = {
   slug: string
@@ -32,7 +52,7 @@ type GetDetailMangaRequest = {
 export interface ItemsResponseData extends BaseData {
     seoOnPage: SeoOnPage
     params: Params
-    items: Manga[]
+    items: DetailManga[]
     breadCrumb: string[]
 }
 export const getDetailManga = ({ slug }: GetDetailMangaRequest) => {
