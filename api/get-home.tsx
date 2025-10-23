@@ -2,31 +2,7 @@ import { ResponseData, BaseData } from './common/response'
 import { request } from '@/utils/request'
 import { otruyen } from '@/utils/env'
 import { queryOptions } from '@tanstack/react-query'
-import { Category } from './common/type'
-
-export interface ChapterLatest {
-  filename: string
-  chapter_name: string
-  chapter_title: string
-  chapter_api_data: string
-}
-
-export interface Item {
-  _id: string
-  name: string
-  slug: string
-  origin_name: string[]
-  status: string
-  thumb_url: string
-  sub_docquyen: boolean
-  category: Category[]
-  updatedAt: string // ISO date
-  chaptersLatest: ChapterLatest[]
-}
-
-export interface ItemsResponse {
-  items: Item[]
-}
+import { Manga } from './common/type'
 
 type Pagination = {
   totalItems: number
@@ -54,7 +30,7 @@ type SeoOnPage = {
 export interface ItemsResponseData extends BaseData {
   seoOnPage: SeoOnPage
   params: Params
-  items: Item[]
+  items: Manga[]
   breadCrumb: string[]
 }
 
