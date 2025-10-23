@@ -5,8 +5,8 @@ import { queryOptions } from '@tanstack/react-query'
 import { Category, Chapter } from './common/type'
 
 type Chapters = {
-    server_name: string
-    server_data: Chapter[]
+  server_name: string
+  server_data: Chapter[]
 }
 
 export interface DetailManga {
@@ -30,34 +30,34 @@ type Params = {
 }
 
 type SeoSchema = {
-    // "@context": string,
-    // "@type": string,
-    name: string,
-    url: string,
-    image: string,
-    director: string
+  // "@context": string,
+  // "@type": string,
+  name: string
+  url: string
+  image: string
+  director: string
 }
 
 type SeoOnPage = {
-    og_type: string
-    titleHead: string
-    descriptionHead: string
-    seoSchema: SeoSchema
+  og_type: string
+  titleHead: string
+  descriptionHead: string
+  seoSchema: SeoSchema
 }
 
 type GetDetailMangaRequest = {
-    slug: string
+  slug: string
 }
 
 export interface ItemsResponseData extends BaseData {
-    seoOnPage: SeoOnPage
-    params: Params
-    items: DetailManga[]
-    breadCrumb: string[]
+  seoOnPage: SeoOnPage
+  params: Params
+  items: DetailManga[]
+  breadCrumb: string[]
 }
 export const getDetailManga = ({ slug }: GetDetailMangaRequest) => {
-    return queryOptions({
-        queryKey: ['get-detail-manga', slug],
-        queryFn: () => request<ResponseData<ItemsResponseData>>(otruyen, `v1/api/truyen-tranh/${slug}`, 'GET')
-    })
+  return queryOptions({
+    queryKey: ['get-detail-manga', slug],
+    queryFn: () => request<ResponseData<ItemsResponseData>>(otruyen, `v1/api/truyen-tranh/${slug}`, 'GET')
+  })
 }

@@ -45,10 +45,10 @@ export default function Navbar() {
 
   // chỗ này truyền query cho nó truyền đi
   const navLinks = [
-    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Gì đó' },
-    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Gì đó' },
-    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Gì đó' },
-    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Gì đó' }
+    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Truyện mới' },
+    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Sắp ra mắt' },
+    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Đang phát hành' },
+    { href: { pathname: '/', query: { typelist: 'phim-vietsub', page: 1 } }, label: 'Hoàn thành' }
   ]
 
   return (

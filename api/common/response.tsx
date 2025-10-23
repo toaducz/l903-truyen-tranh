@@ -5,7 +5,7 @@ export interface BaseData {
   items: unknown
   APP_DOMAIN_CDN_IMAGE: string
   APP_DOMAIN_FRONTEND: string
-  [key: string]: unknown  // cho phép có thêm field khác ngoài các field bắt buộc
+  [key: string]: unknown // cho phép có thêm field khác ngoài các field bắt buộc
 }
 
 // generic
