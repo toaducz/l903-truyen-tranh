@@ -54,3 +54,8 @@ export const stripHtml = (html: string) => {
   if (!html) return ''
   return html.replace(/<[^>]+>/g, '').trim()
 }
+
+export const getImageManga = (appDomain: string, thumb_url: string) => {
+  if (!appDomain || !thumb_url) return '@/assets/image/placeholder.jpg'
+  return `${appDomain}/uploads/comics/${thumb_url}`
+}

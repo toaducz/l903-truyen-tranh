@@ -1,0 +1,88 @@
+'use client'
+
+import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import Loading from '@/component/status/loading'
+import Error from '@/component/status/error'
+import { MangaStatus } from '@/utils/enums'
+import { getDetailManga } from '@/api/get-detail-manga'
+import { getImageManga, stripHtml } from '@/utils/format'
+import { CategoryButtons } from '@/component/category/category-button'
+
+const MangaDetailPage: React.FC = () => {
+  const { slug } = useParams()
+  const { data: manga, isLoading, isError } = useQuery(getDetailManga({ slug: String(slug) }))
+
+  if (isLoading) return <Loading />
+  if (isError) return <Error />
+
+  const item = manga?.data?.item
+  const coverImageUrl = getImageManga(manga?.data?.APP_DOMAIN_CDN_IMAGE ?? '', item?.thumb_url ?? '')
+  const title = item?.name || 'Không có tiêu đề'
+  const origin_name = item?.origin_name
+  const content = stripHtml(item?.content ?? '') ?? 'Không có mô tả'
+  const categories = item?.category || []
+
+  return (
+    <div className='min-h-screen bg-black text-white pt-10'>
+      <div className='max-w-6xl mx-auto p-6 md:px-12 pt-12'>
+        <div className='flex flex-col md:flex-row items-start gap-8 border border-slate-700 bg-slate-800 p-4 rounded-lg shadow-md'>
+          <div className='h-72 items-center justify-center round w-56'>
+            <Image
+              unoptimized
+              loading='lazy'
+              src={coverImageUrl}
+              placeholder='blur'
+              blurDataURL='@/assets/image/placeholder.jpg'
+              alt='Manga Cover'
+              width={220}
+              height={350}
+              className='object-cover object-center rounded-lg'
+            />
+          </div>
+
+          <div className='flex-1 space-y-6'>
+            <div>
+              <h1 className='text-3xl font-bold mb-2'>{title}</h1>
+              {origin_name && <p className='text-gray-300 italic'>{origin_name}</p>}
+            </div>
+            <div>
+              <div className='font-bold pb-2'>Nội dung:</div>
+              <div className='text-gray-100 text-base leading-relaxed'>{content}</div>
+            </div>
+
+            <div>
+              <h3 className='text-gray-200 font-semibold mb-1'>Thể loại:</h3>
+              <CategoryButtons categories={categories} />
+            </div>
+
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-200 mt-4'>
+              <div>
+                <span className='font-bold'>Tình trạng: </span>
+                {MangaStatus[item?.status as keyof typeof MangaStatus] || 'Không rõ'}
+              </div>
+              <div>
+                <span className='font-bold'>Tác giả: </span>
+                <span className='cursor-pointer underline'>{item?.author !== '' ? item?.author : 'Đang cập nhật'}</span>
+              </div>
+            </div>
+
+            <div className='pt-4 flex gap-4'>
+              <button className='px-5 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition cursor-pointer'>
+                Đọc mới nhất
+              </button>
+              <button className='px-5 py-2 border border-slate-600 text-slate-300 rounded-lg hover:bg-slate-500 transition cursor-pointer'>
+                Thêm vào yêu thích
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default MangaDetailPage

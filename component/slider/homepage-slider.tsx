@@ -9,6 +9,7 @@ import { Manga } from '@/api/common/type'
 import { MangaStatus } from '@/utils/enums'
 import { formatDate } from '@/utils/format'
 import { useState } from 'react'
+import { getImageManga } from '@/utils/format'
 
 type HomepageSliderProps = {
   mangas: Manga[]
@@ -63,7 +64,7 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
   return (
     <div ref={sliderRef} className='keen-slider pb-16 relative overflow-hidden'>
       {mangas.map((manga, index) => {
-        const coverImageUrl = `${appDomain}/uploads/comics/${manga?.thumb_url ?? ''}`
+        const coverImageUrl = getImageManga(appDomain, manga.thumb_url)
         const title = manga.name || 'Không có tiêu đề'
         const origin_name = manga.origin_name[0] ?? 'Không có mô tả'
         const categoryNames = manga.category.map(c => c.name).join(', ')
@@ -72,8 +73,9 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
         return (
           <div key={index} className='keen-slider__slide flex items-center justify-between px-40'>
             <div
-              className={`w-2/3 pr-8 transition-all duration-700 ease-out ${currentSlide === index ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
-                }`}
+              className={`w-2/3 pr-8 transition-all duration-700 ease-out ${
+                currentSlide === index ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
+              }`}
             >
               <p className='text-gray-300 mb-6 line-clamp-2 italic'>Cập nhật: {updateDay}</p>
               <h2 className='text-3xl font-bold text-white mb-3 line-clamp-2'>{title}</h2>
@@ -87,7 +89,7 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
               </p>
               <div className='flex space-x-2'>
                 <Link
-                  href='/'
+                  href={`detail-manga/${manga.slug}`}
                   className='bg-white hover:opacity-80 text-black px-4 py-2 rounded-lg transition cursor-pointer inline-block'
                 >
                   Xem chi tiết
@@ -110,8 +112,8 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
                 height={400}
                 unoptimized
                 loading='lazy'
-                placeholder="blur"
-                blurDataURL="/placeholder.jpg"
+                placeholder='blur'
+                blurDataURL='@/assets/image/placeholder.jpg'
               />
             </div>
           </div>

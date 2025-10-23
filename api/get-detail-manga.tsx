@@ -52,7 +52,7 @@ type GetDetailMangaRequest = {
 export interface ItemsResponseData extends BaseData {
   seoOnPage: SeoOnPage
   params: Params
-  items: DetailManga[]
+  item: DetailManga
   breadCrumb: string[]
 }
 export const getDetailManga = ({ slug }: GetDetailMangaRequest) => {
