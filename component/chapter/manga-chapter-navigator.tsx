@@ -27,8 +27,9 @@ export default function ChapterNavigator({ slug, url }: ChapterNavigatorProps) {
 
   const navigateTo = (index: number) => {
     const chapter = chapters[index]
+    const link = chapter.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')
     if (!chapter) return
-    router.replace(`/reader/${chapter.chapter_api_data}?slug=${slug}`)
+    router.replace(`/reader/${link}?slug=${slug}`)
   }
 
   return (
