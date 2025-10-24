@@ -5,9 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Loading from '@/component/status/loading'
 import Error from '@/component/status/error'
-import { getDetailChapter } from '@/api/chapter/get-detail-chapter'
 import placeholder from '@/assets/image/placeholder.jpg'
-import { ChapterResponse } from '@/api/chapter/get-detail-chapter'
+import { getChapterDetailQueryOptions } from '@/api/chapter/get-detail-chapter'
+import ChapterNavigator from '@/component/chapter/manga-chapter-navigator'
 
 interface ChapterReaderScreenProps {
   url: string
@@ -17,15 +17,7 @@ interface ChapterReaderScreenProps {
 export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenProps) {
   const [isHorizontal, setIsHorizontal] = useState(false)
 
-  const {
-    data: chapterData,
-    isLoading,
-    isError
-  } = useQuery<ChapterResponse>({
-    queryKey: ['chapter-detail', url],
-    queryFn: () => getDetailChapter(url),
-    staleTime: 1000 * 60 * 5
-  })
+  const { data: chapterData, isLoading, isError } = useQuery(getChapterDetailQueryOptions(url))
 
   if (isLoading) {
     return (
@@ -49,6 +41,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
 
   return (
     <div className='text-white min-h-screen space-y-10 pt-20 pb-20'>
+      <ChapterNavigator url={url} slug={slug} />
       <div className='flex justify-center py-2'>
         <button
           className='px-4 py-1 bg-slate-700 rounded-full hover:bg-slate-600 transition cursor-pointer'
@@ -63,6 +56,8 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
       ) : (
         <VerticalReader domain={domain!} chapterPath={chapter_path!} images={chapter_image} />
       )}
+
+      <ChapterNavigator url={url} slug={slug} />
     </div>
   )
 }

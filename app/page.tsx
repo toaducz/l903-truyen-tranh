@@ -40,7 +40,7 @@ function MangaSection({ title, items, isLoading, isError }: MangaSectionProps) {
   return (
     <section className='pt-6 bg-zinc-900 rounded-xl'>
       <Link
-        href='/'
+        href={`/list/${''}`}
         className='flex items-center justify-center mb-10 font-bold text-2xl underline decoration-[3px] decoration-blue-400 cursor-pointer hover:opacity-90'
       >
         {title}

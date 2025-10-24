@@ -9,7 +9,7 @@ export const CategoryButtons: React.FC<{ categories: Category[] }> = ({ categori
       {categories.map(cat => (
         <Link
           key={cat.id}
-          href={`/`}
+          href={`/category/${cat.slug}`}
           className='px-3 py-1 rounded-full text-sm font-medium bg-green-800 text-white hover:bg-slate-500 transition'
         >
           {cat.name}

@@ -1,3 +1,5 @@
+import { queryOptions } from '@tanstack/react-query'
+
 export interface ChapterImage {
   image_page: number
   image_file: string
@@ -51,3 +53,12 @@ export async function getDetailChapter(url: string): Promise<ChapterResponse> {
     }
   }
 }
+
+// api/query-options/get-chapter-detail.ts
+
+export const getChapterDetailQueryOptions = (url: string) =>
+  queryOptions({
+    queryKey: ['chapter-detail', url],
+    queryFn: () => getDetailChapter(url),
+    staleTime: 1000 * 60 * 5
+  })
