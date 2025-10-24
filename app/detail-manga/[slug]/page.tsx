@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import MangaChaptersList from '@/component/chapter/manga-chapter-list'
 import { useParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
@@ -12,6 +11,7 @@ import { MangaStatus } from '@/utils/enums'
 import { getDetailManga } from '@/api/get-detail-manga'
 import { getImageManga, stripHtml } from '@/utils/format'
 import { CategoryButtons } from '@/component/category/category-button'
+import Link from 'next/link'
 
 const MangaDetailPage: React.FC = () => {
   const { slug } = useParams()
@@ -29,7 +29,6 @@ const MangaDetailPage: React.FC = () => {
 
   return (
     <div className='min-h-screen bg-black text-white pt-10'>
-
       <div className='max-w-6xl mx-auto p-6 md:px-12 pt-12 space-y-6'>
         <div className='flex flex-col md:flex-row items-start gap-8 border border-slate-700 bg-slate-800 p-4 rounded-lg shadow-md'>
           <div className='h-72 items-center justify-center round w-56'>
@@ -73,18 +72,26 @@ const MangaDetailPage: React.FC = () => {
             </div>
 
             <div className='pt-4 flex gap-4'>
-              <button className='px-5 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition cursor-pointer'>
-                Đọc mới nhất
-              </button>
+              <Link
+                href={{
+                  pathname: `/reader/${manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')}`,
+                  query: {
+                    slug: manga?.data?.item?.slug,
+                    chapter_name: manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_name ?? 'Không rõ'
+                  }
+                }}
+                className='px-5 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition cursor-pointer'
+              >
+                Đọc từ đầu
+              </Link>
               <button className='px-5 py-2 border border-slate-600 text-slate-300 rounded-lg hover:bg-slate-500 transition cursor-pointer'>
                 Thêm vào yêu thích
               </button>
             </div>
           </div>
         </div>
-        <MangaChaptersList chapters={manga?.data?.item?.chapters ?? []} slug={manga?.data?.item?.slug ?? ""} />
+        <MangaChaptersList chapters={manga?.data?.item?.chapters ?? []} slug={manga?.data?.item?.slug ?? ''} />
       </div>
-      
     </div>
   )
 }

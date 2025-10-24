@@ -3,6 +3,7 @@ import { Manga } from '@/api/common/type'
 import Image from 'next/image'
 import { caculatingLastTime } from '@/utils/caculating-last-time'
 import { getImageManga } from '@/utils/format'
+import placeholder from '@/assets/image/placeholder.jpg'
 
 type MangaItemProps = {
   manga: Manga
@@ -33,7 +34,7 @@ export default function MangaItem({
           fill
           unoptimized
           placeholder='blur'
-          blurDataURL='@/assets/image/placeholder.jpg'
+          blurDataURL={placeholder.src}
           loading='lazy'
           className='object-cover object-center group-hover:opacity-80'
         />
