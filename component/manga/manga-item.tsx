@@ -19,7 +19,7 @@ export default function MangaItem({
   const title = manga.name || 'Không có tiêu đề'
   const origin_name = manga.origin_name?.[0] ?? 'Không có mô tả'
   const updateDate = caculatingLastTime(manga.updatedAt ?? Date())
-  const newChapterName = manga.chaptersLatest[0].chapter_name
+  const newChapterName = manga?.chaptersLatest?.[0]?.chapter_name ?? ''
 
   return (
     <Link

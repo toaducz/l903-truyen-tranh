@@ -5,6 +5,7 @@ import Providers from './provider'
 import { Suspense } from 'react'
 import NProgressInit from '@/component/NProgressInit'
 import Navbar from '@/component/navbar'
+import Footer from '@/component/footer'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +36,7 @@ export default function RootLayout({
           </Suspense>
           <Navbar />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

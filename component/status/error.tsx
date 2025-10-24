@@ -16,7 +16,7 @@ export default function Error() {
         <div className='h-full bg-gradient-to-r from-pink-500 to-purple-500 animate-[loading_2s_ease-in-out_infinite]'></div>
       </div>
       <p className='text-xl font-semibold text-blue-600 dark:text-blue-400 mt-4 animate-[fade-in_0.8s_ease-out]'></p>
-      <p>Lỗi</p>
+      <p>Lỗi rồi</p>
     </div>
   )
 }
