@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import MangaChaptersList from '@/component/chapter/manga-chapter-list'
 import { useParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@/component/status/loading'
@@ -28,7 +29,8 @@ const MangaDetailPage: React.FC = () => {
 
   return (
     <div className='min-h-screen bg-black text-white pt-10'>
-      <div className='max-w-6xl mx-auto p-6 md:px-12 pt-12'>
+
+      <div className='max-w-6xl mx-auto p-6 md:px-12 pt-12 space-y-6'>
         <div className='flex flex-col md:flex-row items-start gap-8 border border-slate-700 bg-slate-800 p-4 rounded-lg shadow-md'>
           <div className='h-72 items-center justify-center round w-56'>
             <Image
@@ -80,7 +82,9 @@ const MangaDetailPage: React.FC = () => {
             </div>
           </div>
         </div>
+        <MangaChaptersList chapters={manga?.data?.item?.chapters ?? []} slug={manga?.data?.item?.slug ?? ""} />
       </div>
+      
     </div>
   )
 }

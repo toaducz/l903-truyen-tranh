@@ -62,7 +62,7 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
   )
 
   return (
-    <div ref={sliderRef} className='keen-slider pb-16 relative overflow-hidden'>
+    <div ref={sliderRef} className='keen-slider pb-8 relative overflow-hidden'>
       {mangas.map((manga, index) => {
         const coverImageUrl = getImageManga(appDomain, manga.thumb_url)
         const title = manga.name || 'Không có tiêu đề'
@@ -71,7 +71,7 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
         const updateDay = formatDate(manga.updatedAt)
 
         return (
-          <div key={index} className='keen-slider__slide flex items-center justify-between px-40'>
+          <div key={index} className='keen-slider__slide flex items-center justify-between px-40 shadow rounded-2xl bg-zinc-900'>
             <div
               className={`w-2/3 pr-8 transition-all duration-700 ease-out ${
                 currentSlide === index ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'

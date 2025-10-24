@@ -38,7 +38,7 @@ function MangaSection({ title, items, isLoading, isError }: MangaSectionProps) {
   if (!items?.length) return null
 
   return (
-    <section className="pb-6">
+    <section className="pt-6 bg-zinc-900 rounded-xl">
       <Link href='/' className="flex items-center justify-center mb-10 font-bold text-2xl underline decoration-[3px] decoration-blue-400 cursor-pointer hover:opacity-90">
         {title}
       </Link>
@@ -76,13 +76,14 @@ export default function MangaPage() {
       <div className="px-20">
         <HomepageSlider mangas={homePage?.data?.items} />
       </div>
-
-      <MangaSection title="TRUYỆN MỚI CẬP NHẬT" items={homePageData} />
-      <MangaSection title="MANGA" items={mangaData} isLoading={mangaLoading} isError={!!mangaError} />
-      <MangaSection title="MANHUA" items={manhuaData} isLoading={manhuaLoading} isError={!!manhuaError} />
-      <MangaSection title="MANHWA" items={manhwaData} isLoading={manhwaLoading} isError={!!manhwaError} />
-      <MangaSection title="WEBTOON" items={webtoonData} isLoading={webtoonLoading} isError={!!webtoonError} />
-      <MangaSection title="SẮP RA MẮT" items={mangaUpdateData} isLoading={mangaUpdateLoading} isError={!!mangaUpdateError} />
+      <div className='space-y-6'>
+        <MangaSection title="TRUYỆN MỚI CẬP NHẬT" items={homePageData} />
+        <MangaSection title="MANGA" items={mangaData} isLoading={mangaLoading} isError={!!mangaError} />
+        <MangaSection title="MANHUA" items={manhuaData} isLoading={manhuaLoading} isError={!!manhuaError} />
+        <MangaSection title="MANHWA" items={manhwaData} isLoading={manhwaLoading} isError={!!manhwaError} />
+        <MangaSection title="WEBTOON" items={webtoonData} isLoading={webtoonLoading} isError={!!webtoonError} />
+        <MangaSection title="SẮP RA MẮT" items={mangaUpdateData} isLoading={mangaUpdateLoading} isError={!!mangaUpdateError} />
+      </div>
     </div>
   )
 }
