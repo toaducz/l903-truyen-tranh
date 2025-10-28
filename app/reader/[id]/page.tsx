@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams, useParams } from 'next/navigation'
-import ChapterReaderScreen from '@/app/page/manga-reader-screen'
+import ChapterReaderScreen from '@/app/page/manga-reader-page'
 import { Suspense } from 'react'
 
 export default function MangaReaderPageWrapper() {
