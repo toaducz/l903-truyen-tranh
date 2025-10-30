@@ -14,14 +14,14 @@ type MangaListPageProps = {
 
 export default function MangaListPage({ mangas, title = '' }: MangaListPageProps) {
     return (
-        <div className='min-h-screen bg-[#0f0f0f] text-white p-4 pt-25 pb-20'>
+        <div className='min-h-screen bg-[#0f0f0f] text-white p-4 pt-25'>
             {mangas?.length > 0 && (
                 <h1 className='text-2xl font-bold mb-4 text-center pb-4'>{title}</h1>
             )}
 
             <div>
                 {mangas?.length > 0 ? (
-                    <div className='grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-items-center px-24 py-10 bg-zinc-900 rounded-xl min-h-screen'>
+                    <div className='grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 justify-items-center px-32 py-10 bg-zinc-900 rounded-xl min-h-screen'>
                         {mangas.map(manga => {
                             return (
                                 <div key={manga.slug}>
