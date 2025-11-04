@@ -45,10 +45,10 @@ export default function Navbar() {
 
   // chỗ này truyền query cho nó truyền đi
   const navLinks = [
-    { href: { pathname: '/list', query: { list: 'truyen-moi', page: 1 } }, label: 'Truyện mới' },
-    { href: { pathname: '/list', query: { list: 'sap-ra-mat', page: 1 } }, label: 'Sắp ra mắt' },
-    { href: { pathname: '/list', query: { list: 'dang-phat-hanh', page: 1 } }, label: 'Đang phát hành' },
-    { href: { pathname: '/list', query: { list: 'hoan-thanh', page: 1 } }, label: 'Hoàn thành' }
+    { href: { pathname: '/list', query: { type: 'truyen-moi', page: 1 } }, label: 'Truyện mới' },
+    { href: { pathname: '/list', query: { type: 'sap-ra-mat', page: 1 } }, label: 'Sắp ra mắt' },
+    { href: { pathname: '/list', query: { type: 'dang-phat-hanh', page: 1 } }, label: 'Đang phát hành' },
+    { href: { pathname: '/list', query: { type: 'hoan-thanh', page: 1 } }, label: 'Hoàn thành' }
   ]
 
   return (

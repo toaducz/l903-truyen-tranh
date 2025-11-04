@@ -16,6 +16,7 @@ type MangaSectionProps = {
   items?: Manga[]
   isLoading?: boolean
   isError?: boolean
+  link?:string
 }
 
 function MangaSection({ title, items, isLoading, isError }: MangaSectionProps) {

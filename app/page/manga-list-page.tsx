@@ -41,7 +41,7 @@ export default function MangaListPage({ mangas, title = '' }: MangaListPageProps
                             className='rounded-lg mb-6 object-contain'
                         />
 
-                        <h1 className='text-2xl md:text-3xl font-bold mb-3'>Không có kết quả</h1>
+                        <h1 className='text-2xl md:text-3xl font-bold mb-3'>Không tìm thấy kết quả</h1>
                         <Link
                             href='/'
                             className='mt-3 inline-block px-5 py-2 bg-gray-700 text-white font-medium rounded-lg hover:opacity-80 transition'
