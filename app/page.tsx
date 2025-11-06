@@ -19,7 +19,7 @@ type MangaSectionProps = {
   link?:string
 }
 
-function MangaSection({ title, items, isLoading, isError }: MangaSectionProps) {
+function MangaSection({ title, items, isLoading, isError, link = "/" }: MangaSectionProps) {
   if (isLoading) {
     return (
       <section className='mt-10 flex justify-center'>
@@ -41,7 +41,7 @@ function MangaSection({ title, items, isLoading, isError }: MangaSectionProps) {
   return (
     <section className='pt-6 bg-zinc-900 rounded-xl'>
       <Link
-        href={`/list/${''}`}
+        href={link}
         className='flex items-center justify-center mb-10 font-bold text-2xl underline decoration-[3px] decoration-blue-400 cursor-pointer hover:opacity-90'
       >
         {title}
@@ -101,16 +101,17 @@ export default function MangaPage() {
         <HomepageSlider mangas={homePage?.data?.items} />
       </div>
       <div className='space-y-6'>
-        <MangaSection title='TRUYỆN MỚI CẬP NHẬT' items={homePageData} />
-        <MangaSection title='MANGA' items={mangaData} isLoading={mangaLoading} isError={!!mangaError} />
-        <MangaSection title='MANHUA' items={manhuaData} isLoading={manhuaLoading} isError={!!manhuaError} />
-        <MangaSection title='MANHWA' items={manhwaData} isLoading={manhwaLoading} isError={!!manhwaError} />
-        <MangaSection title='WEBTOON' items={webtoonData} isLoading={webtoonLoading} isError={!!webtoonError} />
+        <MangaSection title='TRUYỆN MỚI CẬP NHẬT' items={homePageData} link={'/list?type=truyen-moi'}/>
+        <MangaSection title='MANGA' items={mangaData} isLoading={mangaLoading} isError={!!mangaError} link={'/category?category=manga'}/>
+        <MangaSection title='MANHUA' items={manhuaData} isLoading={manhuaLoading} isError={!!manhuaError} link={'/category?category=manhua'}/>
+        <MangaSection title='MANHWA' items={manhwaData} isLoading={manhwaLoading} isError={!!manhwaError} link={'/category?category=manhwa'}/>
+        <MangaSection title='WEBTOON' items={webtoonData} isLoading={webtoonLoading} isError={!!webtoonError} link={'/category?category=webtoon'}/>
         <MangaSection
           title='SẮP RA MẮT'
           items={mangaUpdateData}
           isLoading={mangaUpdateLoading}
           isError={!!mangaUpdateError}
+          link={'/list?type=sap-ra-mat'}
         />
       </div>
     </div>

@@ -22,16 +22,16 @@ export default function SearchPage() {
 function SearchPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const query = searchParams?.get('q')?.trim() ?? ''
+  const query = searchParams?.get('category')?.trim() ?? ''
   const pageParam = Number(searchParams.get('page') ?? '1')
   const [page, setPage] = useState(pageParam)
   const { data: results, isLoading, isError } = useQuery(getListByCategory({ slug: query, page: page }))
-  const text = 'Kết quả cho từ khóa: ' + query
+  const text = 'Thể loại: ' + results?.data?.seoOnPage?.titleHead
   const countText = `Có ${results?.data?.params?.pagination?.totalItems} kết quả`
   const totalPages = Math.ceil((results?.data?.params?.pagination?.totalItems ?? 1) / (results?.data?.params?.pagination?.totalItemsPerPage ?? 1))
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
-    router.push(`/search?q=${query}&page=${newPage}`)
+    router.push(`/category?category=${query}&page=${newPage}`)
   }
 
   useEffect(() => {

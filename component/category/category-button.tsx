@@ -6,10 +6,10 @@ export const CategoryButtons: React.FC<{ categories: Category[] }> = ({ categori
 
   return (
     <div className='flex flex-wrap gap-2 pt-2'>
-      {categories.map(cat => (
+      {categories.map((cat, index) => (
         <Link
-          key={cat.id}
-          href={`/category/${cat.slug}`}
+          key={cat._id + index}
+          href={`/category?category=${cat.slug}`}
           className='px-3 py-1 rounded-full text-sm font-medium bg-green-800 text-white hover:bg-slate-500 transition'
         >
           {cat.name}
