@@ -4,17 +4,17 @@ Một dự án web đọc truyện đơn giản được xây dựng bằng **Ne
 
 ## Tính năng
 - Đọc truyện, tìm truyện
-- MarkBook (sắp có) và lịch sửa đọc (sắp có)
+- Markbook (sắp có) và lịch sử đọc (sắp có)
 
 ## Công nghệ sử dụng
 - [Next.js](https://nextjs.org/)
 - [React](https://react.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
-## 🖼️ Giao diện minh họa
+## Minh họa
 ![Demo](public/demo_1.png)
 
-## ⚙️ Cách chạy dự án
+## Run
 ```bash
 # Cài đặt dependencies
 npm install
