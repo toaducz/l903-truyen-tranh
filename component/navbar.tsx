@@ -16,6 +16,7 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [openMenu, setOpenMenu] = useState<'category' | null>(null)
+  const MAX_SEARCH_LENGTH = 100
   const { data: categoryData, isLoading: categoryLoading } = useQuery(getCategory())
 
   const getItems = (): Category[] => {
@@ -44,6 +45,10 @@ export default function Navbar() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
+    if (search.length > MAX_SEARCH_LENGTH) {
+      alert(`Từ khóa quá dài (tối đa ${MAX_SEARCH_LENGTH} ký tự), phá hả mạy?!`)
+      return
+    }
     if (search.trim()) {
       const encoded = encodeURIComponent(search.trim())
       router.push(`/search?q=${encoded}&page=1`)
@@ -59,14 +64,13 @@ export default function Navbar() {
     { href: { pathname: '/list', query: { type: 'sap-ra-mat', page: 1 } }, label: 'Sắp ra mắt' },
     { href: { pathname: '/list', query: { type: 'dang-phat-hanh', page: 1 } }, label: 'Đang phát hành' },
     { href: { pathname: '/list', query: { type: 'hoan-thanh', page: 1 } }, label: 'Hoàn thành' },
-    { href: '#', label: 'Thể loại', dropdown: true }, 
+    { href: '#', label: 'Thể loại', dropdown: true },
   ]
 
   return (
     <nav
-      className={`bg-slate-900 text-white shadow-md w-screen fixed top-0 z-50 transition-transform duration-300 ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
+      className={`bg-slate-900 text-white shadow-md w-screen fixed top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
+        }`}
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between'>
         {/* Logo */}
@@ -101,9 +105,8 @@ export default function Navbar() {
                             key={item.slug}
                             href={item.slug === 'loading' ? '#' : href}
                             onClick={() => setOpenMenu(null)}
-                            className={`block w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 ${
-                              item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
-                            }`}
+                            className={`block w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 ${item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
+                              }`}
                           >
                             {item.name}
                           </Link>
@@ -144,6 +147,15 @@ export default function Navbar() {
           >
             Tìm
           </button>
+
+          {/* <Link
+            key={'user-icon'}
+            href={user?.id !== undefined || null ? '/profile' : '/login'}
+            className='bg-gray-700 rounded-full p-2 hover:bg-white transition duration-300'
+          >
+            <Image src={userIcon} alt='user' width={35} height={35}></Image>
+          </Link> */}
+
         </form>
 
         {/* Hamburger Menu - Mobile */}
@@ -205,9 +217,8 @@ export default function Navbar() {
                               setOpenMenu(null)
                               setIsMenuOpen(false)
                             }}
-                            className={`py-1 text-sm text-slate-300 hover:text-white ${
-                              item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
-                            }`}
+                            className={`py-1 text-sm text-slate-300 hover:text-white ${item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
+                              }`}
                           >
                             {item.name}
                           </Link>

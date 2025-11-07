@@ -6,6 +6,7 @@ import { Suspense } from 'react'
 import NProgressInit from '@/component/NProgressInit'
 import Navbar from '@/component/navbar'
 import Footer from '@/component/footer'
+import { AuthProvider } from './auth-provider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,9 +35,11 @@ export default function RootLayout({
           <Suspense>
             <NProgressInit />
           </Suspense>
-          <Navbar />
-          {children}
-          <Footer />
+          <AuthProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </AuthProvider>
         </Providers>
       </body>
     </html>
