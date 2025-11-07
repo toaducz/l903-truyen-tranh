@@ -8,6 +8,8 @@ import menu from '@/assets/menu.png'
 import { useQuery } from '@tanstack/react-query'
 import { getCategory } from '@/api/get-category'
 import { Category } from '@/api/common/type'
+import { useAuth } from '@/app/auth-provider'
+import userIcon from '@/assets/image/bocchi.jpg'
 
 export default function Navbar() {
   const router = useRouter()
@@ -18,6 +20,8 @@ export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<'category' | null>(null)
   const MAX_SEARCH_LENGTH = 100
   const { data: categoryData, isLoading: categoryLoading } = useQuery(getCategory())
+
+  const { user } = useAuth()
 
   const getItems = (): Category[] => {
     if (openMenu === 'category') {
@@ -148,13 +152,13 @@ export default function Navbar() {
             Tìm
           </button>
 
-          {/* <Link
+          <Link
             key={'user-icon'}
             href={user?.id !== undefined || null ? '/profile' : '/login'}
             className='bg-gray-700 rounded-full p-2 hover:bg-white transition duration-300'
           >
             <Image src={userIcon} alt='user' width={35} height={35}></Image>
-          </Link> */}
+          </Link>
 
         </form>
 
