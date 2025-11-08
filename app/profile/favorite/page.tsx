@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import HistoryItem from '@/component/item/profile-movie-items'
+// import HistoryItem from '@/component/item/profile-movie-items'
 
 type FavoriteMovie = {
   name: string
@@ -61,7 +61,7 @@ export default function FavoritePage() {
 
   return (
     <div className='pt-25 px-4 max-w-5xl mx-auto min-h-screen'>
-      <h1 className='text-2xl font-bold mb-6'>Phim yêu thích</h1>
+      {/* <h1 className='text-2xl font-bold mb-6'>Phim yêu thích</h1>
 
       {loading && <p className='text-gray-500'>Đang tải...</p>}
       {error && <p className='text-red-500'>{error}</p>}
@@ -83,7 +83,7 @@ export default function FavoritePage() {
         </div>
       ) : null}
 
-      {!loading && !error && favorites.length === 0 && <p className='text-gray-500'>Bạn chưa có phim yêu thích nào.</p>}
+      {!loading && !error && favorites.length === 0 && <p className='text-gray-500'>Bạn chưa có phim yêu thích nào.</p>} */}
     </div>
   )
 }

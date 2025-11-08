@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '../auth-provider'
-import HistoryItem from '@/component/item/profile-movie-items'
-import { getViewHistory } from '@/utils/local-storage'
+// import HistoryItem from '@/component/item/profile-movie-items'
+// import { getViewHistory } from '@/utils/local-storage'
 
 type FavoriteMovie = {
   name: string
@@ -18,9 +18,9 @@ export default function ProfilePage() {
   const [favorites, setFavorites] = useState<FavoriteMovie[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    setHistory(getViewHistory().slice(0, 5))
-  }, [])
+  // useEffect(() => {
+  //   setHistory(getViewHistory().slice(0, 5))
+  // }, [])
 
   useEffect(() => {
     setLoading(true)
@@ -54,9 +54,9 @@ export default function ProfilePage() {
         <h2 className='text-xl font-semibold mb-3'>Phim đã xem gần đây</h2>
         {history.length > 0 ? (
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4'>
-            {history.map(movie => (
+            {/* {history.map(movie => (
               <HistoryItem key={movie.slug} slug={movie.slug} name={movie.name} image={movie.image} />
-            ))}
+            ))} */}
           </div>
         ) : (
           <p className='text-gray-500'>Chưa có phim nào</p>
@@ -75,9 +75,9 @@ export default function ProfilePage() {
           <p className='text-gray-500'>Đang tải...</p>
         ) : favorites.length > 0 ? (
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4'>
-            {favorites.map(movie => (
+            {/* {favorites.map(movie => (
               <HistoryItem key={movie.slug} slug={movie.slug} name={movie.name} image={movie.image} />
-            ))}
+            ))} */}
           </div>
         ) : (
           <p className='text-gray-500'>Bạn chưa có phim yêu thích nào.</p>

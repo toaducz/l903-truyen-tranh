@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import HistoryItem from '@/component/item/profile-movie-items'
-import { getViewHistory } from '@/utils/local-storage'
+// import HistoryItem from '@/component/item/profile-movie-items'
+// import { getViewHistory } from '@/utils/local-storage'
 
 export default function FavoritePage() {
   const [allMovies, setAllMovies] = useState<{ name: string; slug: string; image: string }[]>([])
@@ -10,11 +10,11 @@ export default function FavoritePage() {
   const [page, setPage] = useState(1)
   const PAGE_SIZE = 10
 
-  useEffect(() => {
-    const history = getViewHistory()
-    setAllMovies(history)
-    setVisibleMovies(history.slice(0, PAGE_SIZE))
-  }, [])
+  // useEffect(() => {
+  //   const history = getViewHistory()
+  //   setAllMovies(history)
+  //   setVisibleMovies(history.slice(0, PAGE_SIZE))
+  // }, [])
 
   // fake infinite scrolling cho ngầu
   const handleScroll = useCallback(() => {
@@ -47,9 +47,9 @@ export default function FavoritePage() {
 
       {visibleMovies.length > 0 ? (
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 min-h-screen'>
-          {visibleMovies.map(movie => (
+          {/* {visibleMovies.map(movie => (
             <HistoryItem key={movie.slug} slug={movie.slug} name={movie.name} image={movie.image} />
-          ))}
+          ))} */}
         </div>
       ) : (
         <p className='text-gray-500 min-h-screen'>Bạn chưa xem phim nào.</p>
