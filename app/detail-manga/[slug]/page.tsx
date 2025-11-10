@@ -80,9 +80,8 @@ const MangaDetailPage: React.FC = () => {
                   )}`,
                   query: {
                     slug: manga?.data?.item?.slug,
-                    chapter_name:
-                      manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_name ?? 'Không rõ',
-                  },
+                    chapter_name: manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_name ?? 'Không rõ'
+                  }
                 }}
                 className='px-4 sm:px-5 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition cursor-pointer text-sm sm:text-base'
               >
@@ -93,7 +92,6 @@ const MangaDetailPage: React.FC = () => {
                 Thêm vào yêu thích
               </button>
             </div>
-
           </div>
         </div>
         <MangaChaptersList chapters={manga?.data?.item?.chapters ?? []} slug={manga?.data?.item?.slug ?? ''} />

@@ -46,15 +46,27 @@ export interface ItemsResponseData extends BaseData {
 type GetListByKeywordRequest = {
   page: number
   keyword: string
+  sort_field?: string
+  sort_type?: string
+  category?: string
 }
 
-export const getListByKeyword = ({ page = 1, keyword }: GetListByKeywordRequest) => {
+export const getListByKeyword = ({
+  page = 1,
+  keyword,
+  sort_field = '_id',
+  sort_type = 'desc',
+  category
+}: GetListByKeywordRequest) => {
   return queryOptions({
-    queryKey: ['get-list-by-keyword', page, keyword],
+    queryKey: ['get-list-by-keyword', page, keyword, sort_field, sort_type, category],
     queryFn: () =>
       request<ResponseData<ItemsResponseData>>(otruyen, `v1/api/tim-kiem`, 'GET', {
         page: page,
-        keyword: keyword
+        keyword: keyword,
+        sort_field: sort_field,
+        sort_type: sort_type,
+        category: category
       })
   })
 }

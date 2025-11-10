@@ -11,7 +11,7 @@ import Error from '@/component/status/error'
 import Link from 'next/link'
 import { Manga } from '@/api/common/type'
 import { useEffect, useRef } from 'react'
-import { animate, stagger  } from 'animejs'
+import { animate, stagger } from 'animejs'
 
 type MangaSectionProps = {
   title: string
@@ -22,25 +22,23 @@ type MangaSectionProps = {
   animation?: boolean
 }
 
-function MangaSection({ title, items, isLoading, isError, link = "/", animation = false }: MangaSectionProps) {
+function MangaSection({ title, items, isLoading, isError, link = '/', animation = false }: MangaSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!animation || !sectionRef.current) return
 
-    sectionRef.current
-      .querySelectorAll('.manga-item')
-      .forEach(el => {
-        (el as HTMLElement).style.opacity = '0'
-        ;(el as HTMLElement).style.transform = 'translateY(30px)'
-      })
+    sectionRef.current.querySelectorAll('.manga-item').forEach(el => {
+      ;(el as HTMLElement).style.opacity = '0'
+      ;(el as HTMLElement).style.transform = 'translateY(30px)'
+    })
 
     animate(sectionRef.current.querySelectorAll('.manga-item'), {
       opacity: [0, 1],
       translateY: [30, 0],
       delay: stagger(100),
       duration: 800,
-      easing: 'easeOutExpo',
+      easing: 'easeOutExpo'
     })
   }, [animation])
 
@@ -73,7 +71,7 @@ function MangaSection({ title, items, isLoading, isError, link = "/", animation 
       <div className='flex justify-center items-center'>
         <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4'>
           {items.map(manga => (
-            <div key={manga._id} className="manga-item">
+            <div key={manga._id} className='manga-item'>
               <MangaItem manga={manga} showUpdateTime={true} />
             </div>
           ))}
@@ -128,10 +126,34 @@ export default function MangaPage() {
       </div>
       <div className='space-y-6'>
         <MangaSection title='TRUYỆN MỚI CẬP NHẬT' items={homePageData} link={'/list?type=truyen-moi'} />
-        <MangaSection title='MANGA' items={mangaData} isLoading={mangaLoading} isError={!!mangaError} link={'/category?category=manga'} />
-        <MangaSection title='MANHUA' items={manhuaData} isLoading={manhuaLoading} isError={!!manhuaError} link={'/category?category=manhua'} />
-        <MangaSection title='MANHWA' items={manhwaData} isLoading={manhwaLoading} isError={!!manhwaError} link={'/category?category=manhwa'} />
-        <MangaSection title='WEBTOON' items={webtoonData} isLoading={webtoonLoading} isError={!!webtoonError} link={'/category?category=webtoon'} />
+        <MangaSection
+          title='MANGA'
+          items={mangaData}
+          isLoading={mangaLoading}
+          isError={!!mangaError}
+          link={'/category?category=manga'}
+        />
+        <MangaSection
+          title='MANHUA'
+          items={manhuaData}
+          isLoading={manhuaLoading}
+          isError={!!manhuaError}
+          link={'/category?category=manhua'}
+        />
+        <MangaSection
+          title='MANHWA'
+          items={manhwaData}
+          isLoading={manhwaLoading}
+          isError={!!manhwaError}
+          link={'/category?category=manhwa'}
+        />
+        <MangaSection
+          title='WEBTOON'
+          items={webtoonData}
+          isLoading={webtoonLoading}
+          isError={!!webtoonError}
+          link={'/category?category=webtoon'}
+        />
         <MangaSection
           title='SẮP RA MẮT'
           items={mangaUpdateData}

@@ -44,16 +44,25 @@ export interface ItemsResponseData extends BaseData {
 type GetListByCategoryeRequest = {
   page: number
   slug: string
+  sort_field?: string
+  sort_type?: string
 }
 
 // Available values : Category
 
-export const getListByCategory = ({ page = 1, slug }: GetListByCategoryeRequest) => {
+export const getListByCategory = ({
+  page = 1,
+  slug,
+  sort_field = '_id',
+  sort_type = 'desc'
+}: GetListByCategoryeRequest) => {
   return queryOptions({
-    queryKey: ['get-list-by-category', page, slug],
+    queryKey: ['get-list-by-category', page, slug, sort_field, sort_type],
     queryFn: () =>
       request<ResponseData<ItemsResponseData>>(otruyen, `v1/api/the-loai/${slug}`, 'GET', {
-        page: page
+        page: page,
+        sort_field: sort_field,
+        sort_type: sort_type
       })
   })
 }

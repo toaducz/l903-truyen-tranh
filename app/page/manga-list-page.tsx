@@ -14,10 +14,8 @@ type MangaListPageProps = {
 
 export default function MangaListPage({ mangas, title = '' }: MangaListPageProps) {
   return (
-    <div className='min-h-screen bg-[#0f0f0f] text-white p-4 pt-24'>
-      {mangas?.length > 0 && (
-        <h1 className='text-2xl font-bold mb-4 text-center pb-4'>{title}</h1>
-      )}
+    <div className='min-h-screen bg-[#0f0f0f] text-white pb-4 px-4'>
+      {title?.length > 0 && <h1 className='text-2xl font-bold mb-4 text-center pb-4'>{title}</h1>}
 
       {mangas?.length > 0 ? (
         <div

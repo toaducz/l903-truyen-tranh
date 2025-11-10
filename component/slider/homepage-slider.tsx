@@ -70,7 +70,7 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
         const origin_name = manga.origin_name[0] ?? 'Không có mô tả'
         const categoryNames = manga.category.map(c => c.name).join(', ')
         const updateDay = formatDate(manga.updatedAt)
-        const hasChaptersLatest = !!manga.chaptersLatest;
+        const hasChaptersLatest = !!manga.chaptersLatest
         return (
           <div
             key={index}
@@ -98,18 +98,20 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
                 >
                   Xem chi tiết
                 </Link>
-                {hasChaptersLatest && (<Link
-                  href={{
-                    pathname: `/reader/${manga?.chaptersLatest[0]?.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')}`,
-                    query: {
-                      slug: manga?.slug,
-                      chapter_name: manga?.chaptersLatest[0]?.chapter_name ?? 'Không rõ'
-                    }
-                  }}
-                  className='bg-white hover:opacity-80 text-black px-4 py-2 rounded-lg transition cursor-pointer inline-block'
-                >
-                  Đọc chương mới nhất
-                </Link>)}
+                {hasChaptersLatest && (
+                  <Link
+                    href={{
+                      pathname: `/reader/${manga?.chaptersLatest[0]?.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')}`,
+                      query: {
+                        slug: manga?.slug,
+                        chapter_name: manga?.chaptersLatest[0]?.chapter_name ?? 'Không rõ'
+                      }
+                    }}
+                    className='bg-white hover:opacity-80 text-black px-4 py-2 rounded-lg transition cursor-pointer inline-block'
+                  >
+                    Đọc chương mới nhất
+                  </Link>
+                )}
               </div>
             </div>
 

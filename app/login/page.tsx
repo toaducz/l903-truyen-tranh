@@ -23,9 +23,7 @@ export default function LoginPage() {
   }, [user, router])
 
   if (checkingUser) {
-    return (
-      < Loading />
-    )
+    return <Loading />
   }
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -40,56 +38,69 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password })
       })
 
-      // const result = await res.json()
-
       if (!res.ok) {
         setError('Đăng nhập thất bại')
       } else {
         window.location.href = '/'
       }
-    } catch (err) {
-      setError('Đăng nhập thất bại' + err)
+    } catch {
+      setError('Lỗi kết nối')
     }
 
     setLoading(false)
   }
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-slate-900'>
-      {!user?.id ? (
-        <form onSubmit={handleLogin} className='bg-slate-800 p-6 rounded-lg shadow-md w-80'>
-          <h2 className='text-xl font-bold mb-4 text-center'>Đăng nhập</h2>
+    <div className='flex min-h-screen items-center justify-center bg-slate-950 px-4'>
+      {!user?.id && (
+        <form
+          onSubmit={handleLogin}
+          className='w-full max-w-sm bg-slate-900/70 backdrop-blur-sm border border-slate-800 p-8 rounded-2xl shadow-lg'
+        >
+          <h2 className='text-2xl font-semibold text-center text-white mb-6 tracking-wide'>Đăng nhập</h2>
+          <div className='mb-4'>
+            <label className='block text-slate-300 text-sm mb-1'>Email</label>
+            <input
+              type='email'
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder='example@email.com'
+              required
+              className='w-full bg-slate-800 text-white rounded-lg px-3 py-2 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            />
+          </div>
+          <div className='mb-4'>
+            <label className='block text-slate-300 text-sm mb-1'>Mật khẩu</label>
+            <input
+              type='password'
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder='••••••••'
+              required
+              className='w-full bg-slate-800 text-white rounded-lg px-3 py-2 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            />
+          </div>
 
-          <input
-            type='email'
-            placeholder='Email'
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className='w-full mb-3 px-3 py-2 border rounded'
-            required
-          />
-
-          <input
-            type='password'
-            placeholder='Mật khẩu'
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            className='w-full mb-3 px-3 py-2 border rounded'
-            required
-          />
-
-          {error && <p className='text-red-500 text-sm mb-2'>{error}</p>}
+          {/* Error */}
+          {error && <p className='text-red-500 text-sm text-center mb-3'>{error}</p>}
 
           <button
             type='submit'
             disabled={loading}
-            className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50 cursor-pointer'
+            className='w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium cursor-pointer'
           >
             {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </button>
-          <div className='italic items-center pt-6 text-center underline cursor-pointer hover:opacity-80'>Đăng kí</div>
+
+          {/* Register link */}
+          <div
+            onClick={() => alert('Không cho đăng kí đấy, làm sao?')}
+            className='text-center text-slate-400 text-sm mt-6 cursor-pointer hover:text-blue-400 underline'
+          >
+            Chưa có tài khoản? Đăng ký
+          </div>
         </form>
-      ) : null}
+      )}
     </div>
   )
 }

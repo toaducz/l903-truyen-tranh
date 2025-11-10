@@ -44,17 +44,29 @@ export interface ItemsResponseData extends BaseData {
 type GetListByTypeRequest = {
   page: number
   type: string
+  sort_field?: string
+  sort_type?: string
+  category?: string
 }
 
 // Available values : truyen-moi, sap-ra-mat, dang-phat-hanh, hoan-thanh
 // Default value : truyen-moi
 
-export const getListByType = ({ page = 1, type }: GetListByTypeRequest) => {
+export const getListByType = ({
+  page = 1,
+  type,
+  sort_field = '_id',
+  sort_type = 'desc',
+  category
+}: GetListByTypeRequest) => {
   return queryOptions({
-    queryKey: ['get-list-by-type', page, type],
+    queryKey: ['get-list-by-type', page, type, sort_field, sort_type, category],
     queryFn: () =>
       request<ResponseData<ItemsResponseData>>(otruyen, `v1/api/danh-sach/${type}`, 'GET', {
-        page: page
+        page: page,
+        sort_field: sort_field,
+        sort_type: sort_type,
+        category: category
       })
   })
 }
