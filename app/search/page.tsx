@@ -12,9 +12,8 @@ import { useRouter } from 'next/navigation'
 import SortControl from '@/component/sort/sort-control'
 
 // Bọc phần tử cần sử dụng useSearchParams() bằng Suspense
-export default function SearchPage() {
-  const searchParams = useSearchParams()
-  const queryKey = searchParams?.toString()
+export default function SearchPage({ queryKey }: { queryKey: string }) {
+
   return (
     <Suspense>
       <SearchPageContent key={queryKey} />

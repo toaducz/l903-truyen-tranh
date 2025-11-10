@@ -10,9 +10,8 @@ import Loading from '@/component/status/loading'
 import Error from '@/component/status/error'
 import SortControl from '@/component/sort/sort-control'
 
-export default function ListTypePage() {
-  const searchParams = useSearchParams()
-  const queryKey = searchParams?.toString()
+export default function ListTypePage({ queryKey }: { queryKey: string }) {
+
   return (
     <Suspense>
       <ListTypePageContent key={queryKey} />
