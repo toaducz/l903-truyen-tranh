@@ -16,7 +16,7 @@ export default function LoginPage() {
   const { user } = useAuth()
   
   const loginMutation = useMutation({
-    mutationFn: () => loginApi(email, password),
+    mutationFn: () => loginApi(email, password), 
     onSuccess: data => {
       if (data?.status) {
         window.location.href = '/login'

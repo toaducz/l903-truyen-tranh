@@ -1,9 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-// import { checkApi } from '@/api/bookmark/check'
-// import { addApi } from '@/api/bookmark/add'
-// import { deleteApi } from '@/api/bookmark/delete'
 import { useAuth } from '@/app/auth-provider'
 
 type FavoriteButtonProps = {
@@ -46,7 +43,7 @@ export default function FavoriteButton({ slug, name, image }: FavoriteButtonProp
     setLoading(true)
     try {
       if (isFavorite) {
-        const res = await fetch('/api/bookmark/delete', {
+        const res = await fetch('/api/bookmark/change', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ slug })
@@ -54,7 +51,7 @@ export default function FavoriteButton({ slug, name, image }: FavoriteButtonProp
         const result = await res.json()
         if (!result.error) setIsFavorite(false)
       } else {
-        const res = await fetch('/api/bookmark/add', {
+        const res = await fetch('/api/bookmark/change', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ slug, name, image })
