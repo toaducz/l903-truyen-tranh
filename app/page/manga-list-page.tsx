@@ -2,7 +2,7 @@
 
 import React from 'react'
 import MangaItem from '@/component/manga/manga-item'
-import { Manga } from '@/api/common/type'
+import { Manga } from '@/lib/api/common/type'
 import Image from 'next/image'
 import bocchi from '@/assets/image/bocchi.jpg'
 import Link from 'next/link'

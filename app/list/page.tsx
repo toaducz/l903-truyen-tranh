@@ -3,7 +3,7 @@
 import { Suspense, useState, useEffect } from 'react'
 import { notFound, useSearchParams, useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { getListByType } from '@/api/list/get-list-by-type'
+import { getListByType } from '@/lib/api/list/get-list-by-type'
 import MangaListPage from '@/app/page/manga-list-page'
 import Pagination from '@/component/pagination'
 import Loading from '@/component/status/loading'

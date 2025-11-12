@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Category } from '@/api/common/type'
+import { Category } from '@/lib/api/common/type'
 
 export const CategoryButtons: React.FC<{ categories: Category[] }> = ({ categories }) => {
   if (!categories || categories.length === 0) return null

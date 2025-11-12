@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../auth-provider'
 import { useRouter } from 'next/navigation'
-import { loginApi } from '@/api/services/login'
+import { loginApi } from '@/lib/api/services/login'
 import { useMutation } from '@tanstack/react-query'
 import Loading from '@/component/status/loading'
 

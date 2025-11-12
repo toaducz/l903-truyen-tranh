@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Manga } from '@/api/common/type'
+import { Manga } from '@/lib/api/common/type'
 import Image from 'next/image'
 import { caculatingLastTime } from '@/utils/caculating-last-time'
 import { getImageManga } from '@/utils/format'

@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getCategory } from '@/api/get-category'
-import { Category } from '@/api/common/type'
+import { getCategory } from '@/lib/api/get-category'
+import { Category } from '@/lib/api/common/type'
 
 interface SortControlProps {
   sortField: string

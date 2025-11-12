@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { Chapter } from '@/api/common/type'
+import { Chapter } from '@/lib/api/common/type'
 import Link from 'next/link'
 
 interface Chapters {

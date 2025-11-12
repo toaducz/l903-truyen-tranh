@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Loading from '@/component/status/loading'
 import Error from '@/component/status/error'
 import placeholder from '@/assets/image/placeholder.jpg'
-import { getChapterDetailQueryOptions } from '@/api/chapter/get-detail-chapter'
+import { getChapterDetailQueryOptions } from '@/lib/api/chapter/get-detail-chapter'
 import ChapterNavigator from '@/component/chapter/manga-chapter-navigator'
 
 interface ChapterReaderScreenProps {

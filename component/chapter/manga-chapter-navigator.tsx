@@ -2,11 +2,11 @@
 
 import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getDetailManga } from '@/api/get-detail-manga'
+import { getDetailManga } from '@/lib/api/get-detail-manga'
 import { useRouter } from 'next/navigation'
 import Loading from '@/component/status/loading'
 import Error from '@/component/status/error'
-import { Chapter } from '@/api/common/type'
+import { Chapter } from '@/lib/api/common/type'
 
 interface ChapterNavigatorProps {
   slug: string
