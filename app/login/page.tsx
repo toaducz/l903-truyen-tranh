@@ -3,16 +3,32 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../auth-provider'
 import { useRouter } from 'next/navigation'
+import { loginApi } from '@/api/auth/login'
+import { useMutation } from '@tanstack/react-query'
 import Loading from '@/component/status/loading'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [checkingUser, setCheckingUser] = useState<boolean | null>(null)
   const router = useRouter()
   const { user } = useAuth()
+  
+  const loginMutation = useMutation({
+    mutationFn: () => loginApi(email, password),
+    onSuccess: data => {
+      if (data?.status) {
+        window.location.href = '/login'
+        router.replace('/')
+      } else {
+        setError(data?.error || 'Đăng nhập thất bại')
+      }
+    },
+    onError: () => {
+      setError('Lỗi kết nối server')
+    },
+  })
 
   useEffect(() => {
     if (user) {
@@ -26,28 +42,10 @@ export default function LoginPage() {
     return <Loading />
   }
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-
-      if (!res.ok) {
-        setError('Đăng nhập thất bại')
-      } else {
-        window.location.href = '/'
-      }
-    } catch {
-      setError('Lỗi kết nối')
-    }
-
-    setLoading(false)
+    loginMutation.mutate()
   }
 
   return (
@@ -86,10 +84,10 @@ export default function LoginPage() {
 
           <button
             type='submit'
-            disabled={loading}
+            disabled={loginMutation.isPending}
             className='w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium cursor-pointer'
           >
-            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+            {loginMutation.isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </button>
 
           {/* Register link */}

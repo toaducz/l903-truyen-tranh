@@ -1,13 +1,13 @@
 import { NextResponse, NextRequest } from 'next/server'
-import { supabase } from '../../../../lib/supabaseClient'
+import { supabase } from '../../../../lib/supabase-client'
 import { getUserId } from '../../../../lib/auth-helper'
 
 export async function POST(req: NextRequest) {
   const user_id = await getUserId(req)
   const { slug } = await req.json()
   const { data, error } = await supabase
-    .from('favorite')
-    .select('id')
+    .from('bookmark')
+    .select('slug')
     .eq('user_id', user_id)
     .eq('slug', slug)
     .maybeSingle()

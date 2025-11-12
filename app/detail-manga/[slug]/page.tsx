@@ -12,6 +12,7 @@ import { getDetailManga } from '@/api/get-detail-manga'
 import { getImageManga, stripHtml } from '@/utils/format'
 import { CategoryButtons } from '@/component/category/category-button'
 import Link from 'next/link'
+import FavoriteButton from '@/component/bookmark/bookmark-button'
 
 const MangaDetailPage: React.FC = () => {
   const { slug } = useParams()
@@ -88,9 +89,9 @@ const MangaDetailPage: React.FC = () => {
                 Đọc từ đầu
               </Link>
 
-              <button className='px-4 sm:px-5 py-2 border border-slate-600 text-slate-300 rounded-lg hover:bg-slate-500 transition cursor-pointer text-sm sm:text-base'>
-                Thêm vào yêu thích
-              </button>
+              <div>
+                <FavoriteButton slug={String(slug) ?? ""} image={coverImageUrl} name={title} />
+              </div>
             </div>
           </div>
         </div>

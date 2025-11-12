@@ -1,7 +1,7 @@
 export async function request<T>(
-  apiUrl: string, // nhận base API_URL từ parameter
+  apiUrl: string,
   endpoint: string,
-  method: 'GET' | 'POST' = 'GET',
+  method: 'GET' |  'DELETE' | 'POST' = 'GET',
   payload?: Record<string, unknown>
 ): Promise<T | null> {
   let params = ''
@@ -9,9 +9,19 @@ export async function request<T>(
     params = '?' + new URLSearchParams(payload as Record<string, string>).toString()
   }
 
-  const proxyUrl = `/api/proxy?url=${encodeURIComponent(`${apiUrl}${endpoint}${params}`)}`
+  const fullUrl = `${apiUrl}${endpoint}${params}`
+  const isExternal = apiUrl.startsWith('http')
 
-  const res = await fetch(proxyUrl)
+  const targetUrl = isExternal
+    ? `/api/proxy?url=${encodeURIComponent(fullUrl)}`
+    : fullUrl // gọi trực tiếp API
+
+  const res = await fetch(targetUrl, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    ...(method !== 'GET' && payload ? { body: JSON.stringify(payload) } : {}),
+  })
+
   try {
     return (await res.json()) as T
   } catch (e) {

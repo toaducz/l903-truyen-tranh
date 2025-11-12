@@ -3,26 +3,26 @@
 import { useEffect, useState } from 'react'
 // import HistoryItem from '@/component/item/profile-movie-items'
 
-type FavoriteMovie = {
+type FavoriteManga = {
   name: string
   slug: string
   image: string
 }
 
 export default function FavoritePage() {
-  const [favorites, setFavorites] = useState<FavoriteMovie[]>([])
+  const [favorites, setFavorites] = useState<FavoriteManga[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   async function fetchFavorites() {
     try {
       setLoading(true)
-      const res = await fetch('/api/favorite?page=1&limit=20')
+      const res = await fetch('/api/bookmark/list?page=1&limit=20')
       const json = await res.json()
       if (json.error) {
         setError(json.error)
       } else {
-        const mapped: FavoriteMovie[] = json.data.map((item: FavoriteMovie) => ({
+        const mapped: FavoriteManga[] = json.data.map((item: FavoriteManga) => ({
           name: item.name,
           slug: item.slug,
           image: item.image
@@ -42,7 +42,7 @@ export default function FavoritePage() {
 
   const handleDelete = async (slug: string) => {
     try {
-      const res = await fetch('/api/favorite', {
+      const res = await fetch('/api/bookmark/delete', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug })
