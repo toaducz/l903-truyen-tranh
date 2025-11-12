@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { checkApi } from '@/api/bookmark/check'
-import { addApi } from '@/api/bookmark/add'
-import { deleteApi } from '@/api/bookmark/delete'
+// import { checkApi } from '@/api/bookmark/check'
+// import { addApi } from '@/api/bookmark/add'
+// import { deleteApi } from '@/api/bookmark/delete'
 import { useAuth } from '@/app/auth-provider'
 
 type FavoriteButtonProps = {
