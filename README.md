@@ -5,7 +5,7 @@ Một dự án web đọc truyện đơn giản được xây dựng bằng **Ne
 ## Tính năng
 
 - Đọc truyện, tìm truyện
-- Markbook (sắp có) và lịch sử đọc (sắp có)
+- Bookmark và lịch sử đọc truyện
 
 ## Công nghệ sử dụng
 

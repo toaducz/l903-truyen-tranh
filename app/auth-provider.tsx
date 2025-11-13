@@ -29,11 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     window.location.href = '/login'
   }
 
-  return (
-    <AuthContext.Provider value={{ user, setUser, logout, isCheckingUser }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={{ user, setUser, logout, isCheckingUser }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

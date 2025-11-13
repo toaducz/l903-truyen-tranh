@@ -1,4 +1,4 @@
-import { request } from "@/utils/request"
+import { request } from '@/utils/request'
 
 export interface LoginResponse {
   message?: string
@@ -7,6 +7,5 @@ export interface LoginResponse {
 }
 
 export async function loginApi(email: string, password: string) {
-  
   return await request<LoginResponse>('', '/api/auth/login', 'POST', { email, password })
 }

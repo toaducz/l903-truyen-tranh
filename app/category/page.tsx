@@ -13,7 +13,6 @@ import SortControl from '@/component/sort/sort-control'
 
 // Bọc phần tử cần sử dụng useSearchParams() bằng Suspense
 export default function CategoryPage({ queryKey }: { queryKey: string }) {
-
   return (
     <Suspense>
       <CategoryListPageContent key={queryKey} />

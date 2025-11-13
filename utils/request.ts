@@ -1,7 +1,7 @@
 export async function request<T>(
   apiUrl: string,
   endpoint: string,
-  method: 'GET' |  'DELETE' | 'POST' = 'GET',
+  method: 'GET' | 'DELETE' | 'POST' = 'GET',
   payload?: Record<string, unknown>
 ): Promise<T | null> {
   let params = ''
@@ -12,14 +12,12 @@ export async function request<T>(
   const fullUrl = `${apiUrl}${endpoint}${params}`
   const isExternal = apiUrl.startsWith('http')
 
-  const targetUrl = isExternal
-    ? `/api/proxy?url=${encodeURIComponent(fullUrl)}`
-    : fullUrl // gọi trực tiếp API
+  const targetUrl = isExternal ? `/api/proxy?url=${encodeURIComponent(fullUrl)}` : fullUrl // gọi trực tiếp API
 
   const res = await fetch(targetUrl, {
     method,
     headers: { 'Content-Type': 'application/json' },
-    ...(method !== 'GET' && payload ? { body: JSON.stringify(payload) } : {}),
+    ...(method !== 'GET' && payload ? { body: JSON.stringify(payload) } : {})
   })
 
   try {

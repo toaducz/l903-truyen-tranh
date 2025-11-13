@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import MangaChaptersList from '@/component/chapter/manga-chapter-list'
 import { useParams } from 'next/navigation'
@@ -13,10 +13,20 @@ import { getImageManga, stripHtml } from '@/utils/format'
 import { CategoryButtons } from '@/component/category/category-button'
 import Link from 'next/link'
 import FavoriteButton from '@/component/bookmark/bookmark-button'
+import { saveView } from '@/lib/local-storage'
 
 const MangaDetailPage: React.FC = () => {
   const { slug } = useParams()
   const { data: manga, isLoading, isError } = useQuery(getDetailManga({ slug: String(slug) }))
+
+  useEffect(() => {
+    const item = manga?.data?.item
+    saveView({
+      name: item?.name || 'Không có tiêu đề',
+      image: getImageManga(manga?.data?.APP_DOMAIN_CDN_IMAGE ?? '', item?.thumb_url ?? '') ?? '',
+      slug: String(slug) ?? ''
+    })
+  }, [manga, slug])
 
   if (isLoading) return <Loading />
   if (isError) return <Error />
@@ -90,7 +100,7 @@ const MangaDetailPage: React.FC = () => {
               </Link>
 
               <div>
-                <FavoriteButton slug={String(slug) ?? ""} image={coverImageUrl} name={title} />
+                <FavoriteButton slug={String(slug) ?? ''} image={coverImageUrl} name={title} />
               </div>
             </div>
           </div>

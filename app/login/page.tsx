@@ -14,9 +14,9 @@ export default function LoginPage() {
   const [checkingUser, setCheckingUser] = useState<boolean | null>(null)
   const router = useRouter()
   const { user } = useAuth()
-  
+
   const loginMutation = useMutation({
-    mutationFn: () => loginApi(email, password), 
+    mutationFn: () => loginApi(email, password),
     onSuccess: data => {
       if (data?.status) {
         window.location.href = '/login'
@@ -27,7 +27,7 @@ export default function LoginPage() {
     },
     onError: () => {
       setError('Lỗi kết nối server')
-    },
+    }
   })
 
   useEffect(() => {

@@ -1,98 +1,96 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../auth-provider'
-// import HistoryItem from '@/component/item/profile-movie-items'
-// import { getViewHistory } from '@/utils/local-storage'
+import ProfileSidebar from '@/component/profile/profile-sidebar'
+import ProfileMangaList from '@/component/profile/profile-manga-list'
+import { getView } from '@/lib/local-storage'
+import { fetchBookmark } from '@/lib/bookmark'
 
-type FavoriteMovie = {
+type Manga = {
   name: string
   image: string
   slug: string
 }
 
 export default function ProfilePage() {
-  const { logout, user } = useAuth()
-  const [history, setHistory] = useState<FavoriteMovie[]>([])
-  const [favorites, setFavorites] = useState<FavoriteMovie[]>([])
+  const { user, logout } = useAuth()
+  const [tab, setTab] = useState<'bookmark' | 'history' | 'settings'>('bookmark')
+  const [bookmarks, setBookmarks] = useState<Manga[]>([])
+  const [history, setHistory] = useState<Manga[]>([])
   const [loading, setLoading] = useState(true)
 
-  // useEffect(() => {
-  //   setHistory(getViewHistory().slice(0, 5))
-  // }, [])
-
+  // Fetch bookmark (từ supabase)
   useEffect(() => {
+    if (!user) return
     setLoading(true)
-    async function fetchFavorites() {
-      try {
-        const res = await fetch('/api/favorite?page=1&limit=5')
-        const json = await res.json()
-        if (json.data) {
-          const mapped: FavoriteMovie[] = json.data.map((item: FavoriteMovie) => ({
-            name: item.name,
-            image: item.image,
-            slug: item.slug
-          }))
-          setFavorites(mapped)
-        }
-      } catch (err) {
-        console.error('Lỗi fetch favorites:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    if (user) {
-      fetchFavorites()
-    }
+    fetchBookmark()
+      .then(data => setBookmarks(data))
+      .finally(() => setLoading(false))
   }, [user])
 
+  // Fetch history (từ localStorage)
+  useEffect(() => {
+    const viewed = getView()
+    setHistory(viewed)
+  }, [])
+
+  function clearHistory() {
+    localStorage.removeItem('viewHistory')
+    setHistory([])
+  }
+
   return (
-    <div className='pt-25 pb-20 px-4 max-w-4xl mx-auto bg-black'>
-      {user && <p className='mb-6'>Đăng nhập bằng: {user.email}</p>}
-      <section className='mb-8'>
-        <h2 className='text-xl font-semibold mb-3'>Phim đã xem gần đây</h2>
-        {history.length > 0 ? (
-          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4'>
-            {/* {history.map(movie => (
-              <HistoryItem key={movie.slug} slug={movie.slug} name={movie.name} image={movie.image} />
-            ))} */}
-          </div>
-        ) : (
-          <p className='text-gray-500'>Chưa có phim nào</p>
-        )}
-        <div className='mt-3'>
-          <Link href='/profile/history' className='text-blue-600 hover:underline'>
-            Xem thêm
-          </Link>
-        </div>
-      </section>
+    <div className='flex min-h-screen bg-[#0b0b0b] text-white pt-25'>
+      <ProfileSidebar active={tab} onChange={setTab} />
 
-      {/* Phim yêu thích */}
-      <section className='mb-8'>
-        <h2 className='text-xl font-semibold mb-3'>Phim yêu thích</h2>
-        {loading ? (
-          <p className='text-gray-500'>Đang tải...</p>
-        ) : favorites.length > 0 ? (
-          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4'>
-            {/* {favorites.map(movie => (
-              <HistoryItem key={movie.slug} slug={movie.slug} name={movie.name} image={movie.image} />
-            ))} */}
-          </div>
-        ) : (
-          <p className='text-gray-500'>Bạn chưa có phim yêu thích nào.</p>
+      <div className='flex-1 p-6'>
+        {tab === 'bookmark' && (
+          <section>
+            <h2 className='text-xl font-semibold mb-4'>Truyện yêu thích</h2>
+            {loading ? (
+              <p className='text-gray-500'>Đang tải...</p>
+            ) : (
+              <ProfileMangaList list={bookmarks} emptyText='Bạn chưa có truyện yêu thích nào.' isBookmark={true} />
+            )}
+          </section>
         )}
-        <div className='mt-3'>
-          <Link href='/profile/favorite' className='text-blue-600 hover:underline'>
-            Xem thêm
-          </Link>
-        </div>
-      </section>
 
-      <div className='flex justify-center mt-6'>
-        <button onClick={logout} className='px-4 py-2 bg-red-600 text-white rounded cursor-pointer hover:opacity-90'>
-          Đăng xuất
-        </button>
+        {tab === 'history' && (
+          <section>
+            <div className='flex justify-between items-center mb-4'>
+              <h2 className='text-xl font-semibold'>Truyện đã xem gần đây</h2>
+              {history.length > 0 && (
+                <button
+                  onClick={clearHistory}
+                  className='px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition cursor-pointer'
+                >
+                  Xóa tất cả
+                </button>
+              )}
+            </div>
+            <ProfileMangaList list={history} emptyText='Bạn chưa xem truyện nào.' />
+          </section>
+        )}
+
+        {tab === 'settings' && (
+          <section>
+            <h2 className='text-xl font-semibold mb-4'>Cài đặt</h2>
+            {user ? (
+              <>
+                <p className='mb-4'>Đăng nhập bằng: {user.email}</p>
+                <button
+                  onClick={logout}
+                  className='px-4 py-2 bg-red-600 text-white rounded hover:opacity-90 cursor-pointer'
+                >
+                  Đăng xuất
+                </button>
+              </>
+            ) : (
+              <p>Chưa đăng nhập.</p>
+            )}
+          </section>
+        )}
       </div>
     </div>
   )

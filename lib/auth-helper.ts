@@ -28,4 +28,3 @@ export async function getSession(req: NextRequest) {
     return NextResponse.json({ error: 'Không thể thiết lập phiên', details: sessionError.message }, { status: 401 })
   }
 }
-
