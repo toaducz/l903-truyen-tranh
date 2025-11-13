@@ -44,12 +44,16 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
 
           {isBookmark && (
             <button
-              onClick={() => {
-                toggleBookmark(manga, true)
-                window.location.href = '/profile'
+              onClick={async () => {
+                try {
+                  await toggleBookmark(manga, true)
+                  window.location.href = '/profile'
+                } catch (err) {
+                  console.error('Lỗi xóa bookmark:', err)
+                }
               }}
               className='absolute top-2 right-2 w-6 h-6 flex items-center justify-center 
-                         bg-red-600 text-white text-sm rounded-full hover:bg-red-700 transition cursor-pointer'
+               bg-red-600 text-white text-sm rounded-full hover:bg-red-700 transition cursor-pointer'
             >
               ✕
             </button>

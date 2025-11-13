@@ -6,6 +6,7 @@ import ProfileSidebar from '@/component/profile/profile-sidebar'
 import ProfileMangaList from '@/component/profile/profile-manga-list'
 import { getView } from '@/lib/local-storage'
 import { fetchBookmark } from '@/lib/bookmark'
+import Link from 'next/link'
 
 type Manga = {
   name: string
@@ -46,12 +47,22 @@ export default function ProfilePage() {
 
       <div className='flex-1 p-6'>
         {tab === 'bookmark' && (
-          <section>
+          <section className='flex flex-col items-center justify-center min-h-[300px]'>
             <h2 className='text-xl font-semibold mb-4'>Truyện yêu thích</h2>
-            {loading ? (
-              <p className='text-gray-500'>Đang tải...</p>
+
+            {user ? (
+              loading ? (
+                <p className='text-gray-500'>Đang tải...</p>
+              ) : (
+                <ProfileMangaList list={bookmarks} emptyText='Bạn chưa có truyện yêu thích nào.' isBookmark={true} />
+              )
             ) : (
-              <ProfileMangaList list={bookmarks} emptyText='Bạn chưa có truyện yêu thích nào.' isBookmark={true} />
+              <div className='flex flex-col items-center gap-4 mt-8'>
+                <p className='text-gray-400 text-center'>Vui lòng đăng nhập để sử dụng tính năng này.</p>
+                <Link href='/login' className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition'>
+                  Đăng nhập
+                </Link>
+              </div>
             )}
           </section>
         )}
