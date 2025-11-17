@@ -2,6 +2,8 @@
 
 import { useSearchParams, useParams } from 'next/navigation'
 import ChapterReaderScreen from '@/app/page/manga-reader-page'
+import ScrollToBottomButton from '@/component/chapter/scroll-to-bottom'
+import ScrollToTopButton from '@/component/chapter/scroll-to-top'
 import { Suspense } from 'react'
 
 export default function MangaReaderPageWrapper() {
@@ -24,6 +26,10 @@ function MangaReaderPage() {
     <div className='min-h-screen w-full flex justify-center bg-slate-900' style={{ backgroundColor }}>
       <div className='w-full max-w-[900px] px-4 py-6'>
         <ChapterReaderScreen url={url} slug={slugManga} />
+      </div>
+      <div className="hidden md:block">
+        <ScrollToTopButton />
+        <ScrollToBottomButton />
       </div>
     </div>
   )
