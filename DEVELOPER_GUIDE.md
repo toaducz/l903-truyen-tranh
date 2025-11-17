@@ -63,7 +63,6 @@ Testing, linting, formatting
 Quy tắc commit & PR
 - Tiêu đề ngắn gọn, mô tả các thay đổi chính.
 - Thêm note nếu thay đổi schema Supabase hoặc migration.
-- Chạy lint & test trước khi push.
 
 Tài liệu tham khảo nhanh trong repo
 - Xem app/layout.tsx, app/auth-provider.tsx, lib/supabase-client.ts, utils/request.ts, lib/api/*, app/api/*.
