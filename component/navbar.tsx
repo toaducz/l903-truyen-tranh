@@ -152,13 +152,13 @@ export default function Navbar() {
             Tìm
           </button>
 
-          <Link
+          {/* <Link
             key={'user-icon'}
             href={'/profile'}
             className='bg-gray-700 rounded-full p-2 hover:bg-white transition duration-300'
           >
             <Image src={userIcon} alt='user' width={35} height={35}></Image>
-          </Link>
+          </Link> */}
         </form>
 
         {/* Hamburger Menu - Mobile */}
