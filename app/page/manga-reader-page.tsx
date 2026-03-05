@@ -73,7 +73,8 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
 
   return (
     <div className='text-white min-h-screen space-y-10 pt-20 pb-20'>
-      <ChapterNavigator url={url} slug={slug} />
+      <ChapterNavigator url={url} slug={slug} enableKeyboard={!isHorizontal} />
+
       <div className='flex justify-center py-2'>
         <button
           className='px-4 py-1 bg-slate-700 rounded-full hover:bg-slate-600 transition cursor-pointer'

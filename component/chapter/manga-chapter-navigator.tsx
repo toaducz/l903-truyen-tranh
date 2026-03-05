@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getDetailManga } from '@/lib/api/get-detail-manga'
 import { useRouter } from 'next/navigation'
@@ -11,9 +11,10 @@ import { Chapter } from '@/lib/api/common/type'
 interface ChapterNavigatorProps {
   slug: string
   url: string // chapter_api_data
+  enableKeyboard?: boolean
 }
 
-export default function ChapterNavigator({ slug, url }: ChapterNavigatorProps) {
+export default function ChapterNavigator({ slug, url, enableKeyboard = false }: ChapterNavigatorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
 
@@ -25,12 +26,33 @@ export default function ChapterNavigator({ slug, url }: ChapterNavigatorProps) {
   const currentChapter = chapters[currentIndex]
   const currentLabel = currentChapter ? `Chapter ${currentChapter.chapter_name ?? 'Oneshot'}` : 'Danh sách Chapter'
 
-  const navigateTo = (index: number) => {
-    const chapter = chapters[index]
-    const link = chapter.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')
-    if (!chapter) return
-    router.replace(`/reader/${link}?slug=${slug}`)
-  }
+  const navigateTo = useCallback(
+    (index: number) => {
+      const chapter = chapters[index]
+      if (!chapter) return
+      const link = chapter.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')
+      router.replace(`/reader/${link}?slug=${slug}`)
+    },
+    [chapters, slug, router]
+  )
+
+  useEffect(() => {
+    if (!enableKeyboard || chapters.length === 0 || currentIndex === -1) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // bỏ qua nhập text input
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) return
+
+      if (e.key === 'ArrowLeft') {
+        if (currentIndex > 0) navigateTo(currentIndex - 1)
+      } else if (e.key === 'ArrowRight') {
+        if (currentIndex < chapters.length - 1) navigateTo(currentIndex + 1)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [enableKeyboard, currentIndex, chapters, slug, navigateTo])
 
   return (
     <div className='flex justify-around items-center bg-slate-800 border-t border-slate-600 py-2'>
@@ -47,7 +69,9 @@ export default function ChapterNavigator({ slug, url }: ChapterNavigatorProps) {
       </button>
 
       <button
-        className={`p-2 hover:opacity-80 cursor-pointer ${currentIndex >= chapters.length - 1 ? 'text-gray-500' : 'text-white'}`}
+        className={`p-2 hover:opacity-80 cursor-pointer ${
+          currentIndex >= chapters.length - 1 ? 'text-gray-500' : 'text-white'
+        }`}
         disabled={currentIndex < 0 || currentIndex >= chapters.length - 1}
         onClick={() => navigateTo(currentIndex + 1)}
       >
