@@ -20,6 +20,7 @@ const MangaDetailPage: React.FC = () => {
   const { data: manga, isLoading, isError } = useQuery(getDetailManga({ slug: String(slug) }))
 
   useEffect(() => {
+    if (!manga?.data?.item) return
     const item = manga?.data?.item
     const isView = getViewBySlug(String(slug))
     if (isView) return
@@ -39,6 +40,7 @@ const MangaDetailPage: React.FC = () => {
   const origin_name = item?.origin_name
   const content = stripHtml(item?.content ?? '') ?? 'Không có mô tả'
   const categories = item?.category || []
+  const chapters = manga?.data?.item?.chapters || []
 
   return (
     <div className='min-h-screen bg-black text-white pt-10'>
@@ -85,29 +87,30 @@ const MangaDetailPage: React.FC = () => {
             </div>
 
             <div className='pt-4 flex flex-wrap gap-3 sm:gap-4 sm:justify-start justify-center'>
-              <Link
-                href={{
-                  pathname: `/reader/${manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_api_data.replace(
-                    'https://sv1.otruyencdn.com/v1/api/chapter/',
-                    ''
-                  )}`,
-                  query: {
-                    slug: manga?.data?.item?.slug,
-                    chapter_name: manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_name ?? 'Không rõ'
-                  }
-                }}
-                className='px-4 sm:px-5 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition cursor-pointer text-sm sm:text-base'
-              >
-                Đọc từ đầu
-              </Link>
-
+              {chapters.length > 0 && (
+                <Link
+                  href={{
+                    pathname: `/reader/${manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_api_data.replace(
+                      'https://sv1.otruyencdn.com/v1/api/chapter/',
+                      ''
+                    )}`,
+                    query: {
+                      slug: manga?.data?.item?.slug,
+                      chapter_name: manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_name ?? 'Không rõ'
+                    }
+                  }}
+                  className='px-4 sm:px-5 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition cursor-pointer text-sm sm:text-base'
+                >
+                  Đọc từ đầu
+                </Link>
+              )}
               <div>
                 <FavoriteButton slug={String(slug) ?? ''} image={coverImageUrl} name={title} />
               </div>
             </div>
           </div>
         </div>
-        <MangaChaptersList chapters={manga?.data?.item?.chapters ?? []} slug={manga?.data?.item?.slug ?? ''} />
+        <MangaChaptersList chapters={chapters} slug={manga?.data?.item?.slug ?? ''} />
       </div>
     </div>
   )

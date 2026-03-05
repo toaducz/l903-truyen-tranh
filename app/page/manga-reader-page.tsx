@@ -9,7 +9,7 @@ import placeholder from '@/assets/image/placeholder.jpg'
 import { getChapterDetailQueryOptions } from '@/lib/api/chapter/get-detail-chapter'
 import ChapterNavigator from '@/component/chapter/manga-chapter-navigator'
 import { getViewBySlug, updateChapterView } from '@/lib/local-storage'
-import { toggleBookmark } from '@/lib/bookmark'
+import { toggleBookmark, checkBookmark } from '@/lib/bookmark'
 
 interface ChapterReaderScreenProps {
   url: string
@@ -23,13 +23,29 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
 
   useEffect(() => {
     const item = getViewBySlug(slug)
+
     if (item) {
       const chapter_name = chapterData?.data?.item?.chapter_name
       const chapter_id = chapterData?.data?.item?._id
+
       if (chapter_name && chapter_id) {
         updateChapterView(item.slug, chapter_name, chapter_id)
-        // tạm tạm
-        toggleBookmark(item, false)
+
+        const updatedItem = {
+          ...item,
+          chapter_name: chapter_name,
+          chapter_id: chapter_id
+        }
+
+        checkBookmark(slug)
+          .then(isFavorite => {
+            if (isFavorite) {
+              toggleBookmark(updatedItem, false)
+            }
+          })
+          .catch(err => {
+            console.error('Lỗi khi check bookmark:', err)
+          })
       }
     }
   }, [chapterData, slug])
