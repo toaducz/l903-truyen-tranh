@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Loading from '@/component/status/loading'
@@ -8,6 +8,8 @@ import Error from '@/component/status/error'
 import placeholder from '@/assets/image/placeholder.jpg'
 import { getChapterDetailQueryOptions } from '@/lib/api/chapter/get-detail-chapter'
 import ChapterNavigator from '@/component/chapter/manga-chapter-navigator'
+import { getViewBySlug, updateChapterView } from '@/lib/local-storage'
+import { toggleBookmark } from '@/lib/bookmark'
 
 interface ChapterReaderScreenProps {
   url: string
@@ -18,6 +20,19 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
   const [isHorizontal, setIsHorizontal] = useState(false)
 
   const { data: chapterData, isLoading, isError } = useQuery(getChapterDetailQueryOptions(url))
+
+  useEffect(() => {
+    const item = getViewBySlug(slug)
+    if (item) {
+      const chapter_name = chapterData?.data?.item?.chapter_name
+      const chapter_id = chapterData?.data?.item?._id
+      if (chapter_name && chapter_id) {
+        updateChapterView(item.slug, chapter_name, chapter_id)
+        // tạm tạm
+        toggleBookmark(item, false)
+      }
+    }
+  }, [chapterData, slug])
 
   if (isLoading) {
     return (

@@ -1,7 +1,9 @@
-type Manga = {
+export type Manga = {
   name: string
   image: string
   slug: string
+  chapter_name?: string
+  chapter_id?: string
 }
 
 const STORAGE_KEY = 'viewHistory'
@@ -73,5 +75,33 @@ export function getView(): Manga[] {
     return history.map(item => item.data)
   } catch {
     return []
+  }
+}
+
+export function getViewBySlug(slug: string): Manga | null {
+  if (typeof window === 'undefined') return null
+
+  const history = getView()
+  const found = history.find(item => item.slug === slug)
+
+  return found || null
+}
+
+export function updateChapterView(slug: string, chapter_name: string, chapter_id: string) {
+  if (typeof window === 'undefined') return
+
+  const existingManga = getViewBySlug(slug)
+
+  // nếu truyện đã có trong lịch sử, tiến hành cập nhật
+  if (existingManga) {
+    const updatedManga: Manga = {
+      ...existingManga,
+      chapter_name,
+      chapter_id
+    }
+    // gọi lại saveView, nó sẽ tự động xóa cái cũ trùng slug và đưa cái mới lên top 1
+    saveView(updatedManga)
+  } else {
+    console.warn(`Không tìm thấy truyện có slug: ${slug} trong lịch sử để cập nhật chapter.`)
   }
 }

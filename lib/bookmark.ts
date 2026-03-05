@@ -1,8 +1,4 @@
-export type Manga = {
-  slug: string
-  name: string
-  image: string
-}
+import { Manga } from './local-storage'
 
 // check bookmark
 export async function checkBookmark(slug: string): Promise<boolean> {
@@ -24,7 +20,15 @@ export async function checkBookmark(slug: string): Promise<boolean> {
 export async function toggleBookmark(manga: Manga, isFavorite: boolean): Promise<boolean> {
   try {
     const method = isFavorite ? 'DELETE' : 'POST'
-    const body = isFavorite ? { slug: manga.slug } : { slug: manga.slug, name: manga.name, image: manga.image }
+    const body = isFavorite
+      ? { slug: manga.slug }
+      : {
+          slug: manga.slug,
+          name: manga.name,
+          image: manga.image,
+          chapter_name: manga.chapter_name,
+          chapter_id: manga.chapter_id
+        }
 
     const res = await fetch('/api/bookmark/change', {
       method,
@@ -50,7 +54,9 @@ export async function fetchBookmark(page = 1, limit = 20): Promise<Manga[]> {
     const mapped: Manga[] = json.data.map((item: Manga) => ({
       name: item.name,
       image: item.image,
-      slug: item.slug
+      slug: item.slug,
+      chapter_name: item.chapter_name,
+      chapter_id: item.chapter_id
     }))
     return mapped
   } catch (err) {

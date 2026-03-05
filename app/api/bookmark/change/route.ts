@@ -10,21 +10,34 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Không xác thực được' }, { status: 401 })
   }
 
-  const { slug, name, image } = await req.json()
+  const { slug, name, image, chapter_name, chapter_id } = await req.json()
   if (!slug) {
     return NextResponse.json({ error: 'Thiếu slug' }, { status: 400 })
   }
 
-  const { data, error } = await supabase
-    .from('bookmark')
-    .insert([{ user_id: user_id, slug: slug, name: name, image: image }])
+  // dùng upsert thay vì insert
+  // onConflict: xác định cột nào được dùng để kiểm tra sự tồn tại
+  const { data, error } = await supabase.from('bookmark').upsert(
+    {
+      user_id: user_id,
+      slug: slug,
+      name: name,
+      image: image,
+      chapter_name: chapter_name,
+      chapter_id: chapter_id
+    },
+    {
+      onConflict: 'user_id, slug', // báo cho Supabase biết đối chiếu bằng 2 cột này
+      ignoreDuplicates: false // false để nó ghi đè/cập nhật dữ liệu mới
+    }
+  )
 
   if (error) {
     console.error('Lỗi Supabase:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  return NextResponse.json({ data })
+  return NextResponse.json({ data, message: 'Lưu bookmark thành công!' })
 }
 
 export async function DELETE(req: NextRequest) {

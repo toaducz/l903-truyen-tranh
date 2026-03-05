@@ -7,12 +7,7 @@ import ProfileMangaList from '@/component/profile/profile-manga-list'
 import { getView } from '@/lib/local-storage'
 import { fetchBookmark } from '@/lib/bookmark'
 import Link from 'next/link'
-
-type Manga = {
-  name: string
-  image: string
-  slug: string
-}
+import { Manga } from '@/lib/local-storage'
 
 export default function ProfilePage() {
   const { user, logout } = useAuth()

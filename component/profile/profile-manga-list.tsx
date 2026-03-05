@@ -3,12 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { toggleBookmark } from '@/lib/bookmark'
-
-type Manga = {
-  name: string
-  image: string
-  slug: string
-}
+import { Manga } from '@/lib/local-storage'
 
 type Props = {
   list: Manga[]
@@ -23,12 +18,14 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
 
   return (
     <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4'>
-      {list.map(manga => (
-        <div key={manga.slug} className='relative w-full'>
-          <Link
-            href={`/detail-manga/${manga.slug}`}
-            className='block bg-[#181818] rounded-lg overflow-hidden group hover:opacity-80 '
-          >
+      {list.map(manga => {
+        // check truyện đã có chapter đang đọc dở chưa
+        const hasChapter = manga.chapter_name && manga.chapter_id
+        console.log(manga)
+
+        return (
+          <div key={manga.slug} className='relative w-full bg-[#181818] rounded-lg overflow-hidden group'>
+            {/* hover */}
             <div className='relative w-full aspect-[2/3]'>
               <Image
                 src={manga.image}
@@ -36,30 +33,66 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
                 fill
                 unoptimized
                 loading='lazy'
-                className='object-cover object-center'
+                className='object-cover object-center transition-opacity duration-300 group-hover:opacity-40'
               />
-            </div>
-            <div className='p-2 text-sm font-medium truncate'>{manga.name}</div>
-          </Link>
 
-          {isBookmark && (
-            <button
-              onClick={async () => {
-                try {
-                  await toggleBookmark(manga, true)
-                  window.location.href = '/profile'
-                } catch (err) {
-                  console.error('Lỗi xóa bookmark:', err)
-                }
-              }}
-              className='absolute top-2 right-2 w-6 h-6 flex items-center justify-center 
-               bg-red-600 text-white text-sm rounded-full hover:bg-red-700 transition cursor-pointer'
-            >
-              ✕
-            </button>
-          )}
-        </div>
-      ))}
+              <div className='absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10'>
+                <Link
+                  href={`/detail-manga/${manga.slug}`}
+                  className='bg-blue-600 hover:bg-blue-700 text-white text-sm py-1.5 px-3 rounded-md w-32 text-center transition'
+                >
+                  Xem thông tin
+                </Link>
+
+                {hasChapter ? (
+                  <Link
+                    href={`/reader/${manga.chapter_id}?slug=${manga.slug}&chapter_name=${manga.chapter_name}`}
+                    className='bg-green-600 hover:bg-green-700 text-white text-sm py-1.5 px-3 rounded-md w-32 text-center transition'
+                    title={`Đọc tiếp ${manga.chapter_name}`}
+                  >
+                    Chapter {manga.chapter_name}
+                  </Link>
+                ) : (
+                  <button
+                    disabled
+                    className='bg-gray-600 text-gray-400 text-sm py-1.5 px-3 rounded-md w-32 text-center cursor-not-allowed'
+                  >
+                    Đọc tiếp
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className='p-2'>
+              <Link
+                href={`/detail-manga/${manga.slug}`}
+                className='block text-sm font-medium truncate hover:text-blue-400 transition-colors'
+                title={manga.name}
+              >
+                {manga.name}
+              </Link>
+              {hasChapter && <div className='text-xs text-gray-400 truncate mt-0.5'>{manga.chapter_name}</div>}
+            </div>
+
+            {isBookmark && (
+              <button
+                onClick={async () => {
+                  try {
+                    await toggleBookmark(manga, true)
+                    window.location.href = '/profile'
+                  } catch (err) {
+                    console.error('Lỗi xóa bookmark:', err)
+                  }
+                }}
+                className='absolute top-2 right-2 w-6 h-6 flex items-center justify-center 
+                 bg-red-600 text-white text-sm rounded-full hover:bg-red-700 transition cursor-pointer z-20'
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }

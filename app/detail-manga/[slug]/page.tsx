@@ -13,7 +13,7 @@ import { getImageManga, stripHtml } from '@/utils/format'
 import { CategoryButtons } from '@/component/category/category-button'
 import Link from 'next/link'
 import FavoriteButton from '@/component/bookmark/bookmark-button'
-import { saveView } from '@/lib/local-storage'
+import { saveView, getViewBySlug } from '@/lib/local-storage'
 
 const MangaDetailPage: React.FC = () => {
   const { slug } = useParams()
@@ -21,6 +21,8 @@ const MangaDetailPage: React.FC = () => {
 
   useEffect(() => {
     const item = manga?.data?.item
+    const isView = getViewBySlug(String(slug))
+    if (isView) return
     saveView({
       name: item?.name || 'Không có tiêu đề',
       image: getImageManga(manga?.data?.APP_DOMAIN_CDN_IMAGE ?? '', item?.thumb_url ?? '') ?? '',
