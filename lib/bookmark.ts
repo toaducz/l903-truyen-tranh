@@ -27,7 +27,8 @@ export async function toggleBookmark(manga: Manga, isFavorite: boolean): Promise
           name: manga.name,
           image: manga.image,
           chapter_name: manga.chapter_name,
-          chapter_id: manga.chapter_id
+          chapter_id: manga.chapter_id,
+          chapter_url: manga.chapter_url
         }
 
     const res = await fetch('/api/bookmark/change', {
@@ -56,7 +57,8 @@ export async function fetchBookmark(page = 1, limit = 20): Promise<Manga[]> {
       image: item.image,
       slug: item.slug,
       chapter_name: item.chapter_name,
-      chapter_id: item.chapter_id
+      chapter_id: item.chapter_id,
+      chapter_url: item.chapter_url
     }))
     return mapped
   } catch (err) {

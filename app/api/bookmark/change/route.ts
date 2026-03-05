@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Không xác thực được' }, { status: 401 })
   }
 
-  const { slug, name, image, chapter_name, chapter_id } = await req.json()
+  const { slug, name, image, chapter_name, chapter_id, chapter_url } = await req.json()
   if (!slug) {
     return NextResponse.json({ error: 'Thiếu slug' }, { status: 400 })
   }
@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
       name: name,
       image: image,
       chapter_name: chapter_name,
-      chapter_id: chapter_id
+      chapter_id: chapter_id,
+      chapter_url: chapter_url
     },
     {
       onConflict: 'user_id, slug', // báo cho Supabase biết đối chiếu bằng 2 cột này

@@ -4,6 +4,7 @@ export type Manga = {
   slug: string
   chapter_name?: string
   chapter_id?: string
+  chapter_url?: string
 }
 
 const STORAGE_KEY = 'viewHistory'
@@ -87,7 +88,7 @@ export function getViewBySlug(slug: string): Manga | null {
   return found || null
 }
 
-export function updateChapterView(slug: string, chapter_name: string, chapter_id: string) {
+export function updateChapterView(slug: string, chapter_name: string, chapter_id: string, chapter_url: string) {
   if (typeof window === 'undefined') return
 
   const existingManga = getViewBySlug(slug)
@@ -97,7 +98,8 @@ export function updateChapterView(slug: string, chapter_name: string, chapter_id
     const updatedManga: Manga = {
       ...existingManga,
       chapter_name,
-      chapter_id
+      chapter_id,
+      chapter_url
     }
     // gọi lại saveView, nó sẽ tự động xóa cái cũ trùng slug và đưa cái mới lên top 1
     saveView(updatedManga)

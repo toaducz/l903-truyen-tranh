@@ -29,12 +29,13 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
       const chapter_id = chapterData?.data?.item?._id
 
       if (chapter_name && chapter_id) {
-        updateChapterView(item.slug, chapter_name, chapter_id)
+        updateChapterView(item.slug, chapter_name, chapter_id, url)
 
         const updatedItem = {
           ...item,
           chapter_name: chapter_name,
-          chapter_id: chapter_id
+          chapter_id: chapter_id,
+          chapter_url: url
         }
 
         checkBookmark(slug)
@@ -48,7 +49,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
           })
       }
     }
-  }, [chapterData, slug])
+  }, [chapterData, slug, url])
 
   if (isLoading) {
     return (
