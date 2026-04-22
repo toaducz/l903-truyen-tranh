@@ -36,7 +36,7 @@ export default function MangaItem({
           placeholder='blur'
           blurDataURL={placeholder.src}
           loading='lazy'
-          className='object-cover transition-all duration-300 group-hover:opacity-60 group-hover:scale-105'
+          className='object-cover transition-all group-hover:opacity-60'
         />
 
         {showUpdateTime && (
@@ -59,11 +59,7 @@ export default function MangaItem({
         <h3 className='font-semibold text-sm text-zinc-100 line-clamp-2 leading-tight group-hover:text-blue-400 transition-colors'>
           {title}
         </h3>
-        {origin_name && (
-          <p className='text-[10px] text-zinc-500 line-clamp-1 italic font-medium'>
-            {origin_name}
-          </p>
-        )}
+        {origin_name && <p className='text-[10px] text-zinc-500 line-clamp-1 italic font-medium'>{origin_name}</p>}
       </div>
     </Link>
   )
