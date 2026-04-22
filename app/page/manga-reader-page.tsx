@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
+import Link from 'next/link'
 import Loading from '@/component/status/loading'
 import Error from '@/component/status/error'
 import placeholder from '@/assets/image/placeholder.jpg'
@@ -20,6 +21,12 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
   const [isHorizontal, setIsHorizontal] = useState(false)
 
   const { data: chapterData, isLoading, isError } = useQuery(getChapterDetailQueryOptions(url))
+
+  useEffect(() => {
+    if (isHorizontal) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [isHorizontal])
 
   useEffect(() => {
     const item = getViewBySlug(slug)
@@ -53,7 +60,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
 
   if (isLoading) {
     return (
-      <div className='flex items-center justify-center min-h-screen bg-black'>
+      <div className='flex items-center justify-center min-h-screen bg-[#0f172a]'>
         <Loading />
       </div>
     )
@@ -61,7 +68,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
 
   if (isError || !chapterData || chapterData.status !== 'success') {
     return (
-      <div className='flex items-center justify-center min-h-screen bg-black'>
+      <div className='flex items-center justify-center min-h-screen bg-[#0f172a]'>
         <Error />
       </div>
     )
@@ -70,27 +77,76 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
   const domain = chapterData.data?.domain_cdn
   const chapter_path = chapterData.data?.item?.chapter_path
   const chapter_image = chapterData.data?.item?.chapter_image ?? []
+  const chapterName = chapterData.data?.item?.chapter_name
 
   return (
-    <div className='text-white min-h-screen space-y-10 pt-20 pb-20'>
-      <ChapterNavigator url={url} slug={slug} enableKeyboard={!isHorizontal} />
+    <div className='text-white min-h-screen flex flex-col'>
+      {/* Sticky top bar */}
+      <div className='sticky top-0 z-40 bg-[#0f172a]/95 backdrop-blur-sm border-b border-slate-700/50 px-4 py-5 shrink-0'>
+        <div className='max-w-[900px] mx-auto flex items-center justify-between gap-4'>
+          {/* Back button */}
+          <Link
+            href={`/detail-manga/${slug}`}
+            className='flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors group shrink-0'
+          >
+            <svg
+              className='w-4 h-4 transition-transform group-hover:-translate-x-0.5'
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+            </svg>
+            <span className='hidden sm:inline'>Trang chi tiết</span>
+          </Link>
 
-      <div className='flex justify-center py-2'>
-        <button
-          className='px-4 py-1 bg-slate-700 rounded-full hover:bg-slate-600 transition cursor-pointer'
-          onClick={() => setIsHorizontal(p => !p)}
-        >
-          {isHorizontal ? 'Chuyển sang đọc dọc' : 'Chuyển sang đọc ngang (rất lỏ)'}
-        </button>
+          {/* Chapter name */}
+          {chapterName && <span className='text-sm font-semibold text-slate-200 truncate'>Chapter {chapterName}</span>}
+
+          {/* Mode toggle */}
+          <button
+            className='flex items-center gap-1.5 text-xs px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0'
+            onClick={() => setIsHorizontal(p => !p)}
+          >
+            {isHorizontal ? (
+              <>
+                <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 6h16M4 12h16M4 18h16' />
+                </svg>
+                Đọc dọc
+              </>
+            ) : (
+              <>
+                <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+                </svg>
+                Đọc ngang
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
-      {isHorizontal ? (
-        <HorizontalReader domain={domain!} chapterPath={chapter_path!} images={chapter_image} />
-      ) : (
-        <VerticalReader domain={domain!} chapterPath={chapter_path!} images={chapter_image} />
+      {!isHorizontal && (
+        <div className='max-w-[900px] w-full mx-auto pt-4 px-4 shrink-0'>
+          <ChapterNavigator url={url} slug={slug} enableKeyboard={true} />
+        </div>
       )}
 
-      <ChapterNavigator url={url} slug={slug} />
+      {/* Reader content */}
+      <div className={`flex-1 flex flex-col ${isHorizontal ? '' : 'py-2'}`}>
+        {isHorizontal ? (
+          <HorizontalReader domain={domain!} chapterPath={chapter_path!} images={chapter_image} />
+        ) : (
+          <VerticalReader domain={domain!} chapterPath={chapter_path!} images={chapter_image} />
+        )}
+      </div>
+
+      {!isHorizontal && (
+        <div className='max-w-[900px] w-full mx-auto pb-10 px-4 shrink-0'>
+          <ChapterNavigator url={url} slug={slug} />
+        </div>
+      )}
     </div>
   )
 }
@@ -105,11 +161,11 @@ function VerticalReader({
   images: { image_file: string }[]
 }) {
   return (
-    <div className='flex flex-col items-center gap-1'>
+    <div className='flex flex-col items-center'>
       {images.map((img, index) => {
         const imgUrl = `${domain}/${chapterPath}/${img.image_file}`
         return (
-          <div key={index} className='relative w-fit max-w-[70%] flex justify-center bg-black'>
+          <div key={index} className='w-full max-w-[900px] mx-auto'>
             <ChapterImage src={imgUrl} />
           </div>
         )
@@ -132,41 +188,51 @@ function HorizontalReader({
   const nextPage = () => setCurrent(p => Math.min(p + 1, images.length - 1))
   const prevPage = () => setCurrent(p => Math.max(p - 1, 0))
 
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) return
+      if (e.key === 'ArrowLeft') prevPage()
+      if (e.key === 'ArrowRight') nextPage()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  })
+
   const imgUrl = `${domain}/${chapterPath}/${images[current].image_file}`
 
   return (
-    <div
-      className='relative w-full flex flex-col items-center justify-center'
-      style={{
-        height: 'calc(100vh - 7rem)',
-        paddingTop: '6rem',
-        paddingBottom: '4rem'
-      }}
-    >
-      <div className='relative w-fit max-w-[70%]'>
+    <div className='relative flex flex-col items-center justify-center w-full h-[calc(100vh-60px)]'>
+      {/* Page counter */}
+      <div className='absolute top-3 left-1/2 -translate-x-1/2 z-10 bg-black/60 text-white text-xs px-3 py-1 rounded-full pointer-events-none'>
+        {current + 1} / {images.length}
+      </div>
+
+      {/* Image */}
+      <div className='relative h-full w-full flex items-center justify-center p-2'>
         <ChapterImage src={imgUrl} isHorizontal />
       </div>
 
-      <div className='absolute inset-y-0 left-0 right-0 flex justify-between items-center px-2 pointer-events-none'>
-        <button
-          className='pointer-events-auto bg-black/50 text-white px-3 py-2 rounded-full hover:bg-black/70 disabled:opacity-40 cursor-pointer'
-          onClick={prevPage}
-          disabled={current === 0}
-        >
-          ⬅
-        </button>
-        <button
-          className='pointer-events-auto bg-black/50 text-white px-3 py-2 rounded-full hover:bg-black/70 disabled:opacity-40 cursor-pointer'
-          onClick={nextPage}
-          disabled={current === images.length - 1}
-        >
-          ➡
-        </button>
-      </div>
+      {/* Left button */}
+      <button
+        className='absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white p-4 rounded-full disabled:opacity-20 transition cursor-pointer z-10'
+        onClick={prevPage}
+        disabled={current === 0}
+      >
+        <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={3} d='M15 19l-7-7 7-7' />
+        </svg>
+      </button>
 
-      <div className='absolute bottom-3 text-sm text-gray-400'>
-        {current + 1} / {images.length}
-      </div>
+      {/* Right button */}
+      <button
+        className='absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white p-4 rounded-full disabled:opacity-20 transition cursor-pointer z-10'
+        onClick={nextPage}
+        disabled={current === images.length - 1}
+      >
+        <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={3} d='M9 5l7 7-7 7' />
+        </svg>
+      </button>
     </div>
   )
 }
@@ -176,26 +242,26 @@ function ChapterImage({ src, isHorizontal = false }: { src: string; isHorizontal
 
   return (
     <div
-      className={`relative flex justify-center items-center bg-black
-        ${isHorizontal ? 'max-h-[calc(100vh-7rem)]' : 'h-auto'} w-full`}
+      className={`relative flex justify-center items-center bg-[#0f172a]
+        ${isHorizontal ? 'h-full w-full' : 'w-full'}`}
     >
       {isLoading && (
-        <div className='absolute inset-0 flex justify-center items-center bg-black/30'>
-          <div className='animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent'></div>
+        <div className='absolute inset-0 flex justify-center items-center'>
+          <div className='animate-spin rounded-full h-8 w-8 border-2 border-blue-500 border-t-transparent'></div>
         </div>
       )}
 
       <Image
         src={src}
         alt='Chapter Image'
-        width={800}
-        height={1200}
+        width={1200}
+        height={1800}
         placeholder='blur'
         blurDataURL={placeholder.src}
         unoptimized
         loading='lazy'
         className={`transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}
-          ${isHorizontal ? 'max-h-[calc(100vh-7rem)] w-auto object-contain' : 'w-full h-auto object-contain'}`}
+          ${isHorizontal ? 'max-h-full max-w-full h-auto w-auto object-contain' : 'w-full h-auto object-contain'}`}
         onLoad={() => setIsLoading(false)}
         onError={() => setIsLoading(false)}
       />

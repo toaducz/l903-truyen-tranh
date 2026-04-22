@@ -14,44 +14,45 @@ type MangaListPageProps = {
 
 export default function MangaListPage({ mangas, title = '' }: MangaListPageProps) {
   return (
-    <div className='min-h-screen bg-[#0f0f0f] text-white pb-4 px-4'>
-      {title?.length > 0 && <h1 className='text-2xl font-bold mb-4 text-center pb-4'>{title}</h1>}
+    <div className='min-h-screen bg-[#0a0a0a] text-white selection:bg-blue-500/30'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12'>
+        {title && (
+          <div className='flex items-center gap-4 mb-10'>
+            <div className='h-8 w-1 bg-blue-600 rounded-full'></div>
+            <h1 className='text-3xl md:text-4xl text-white'>{title}</h1>
+          </div>
+        )}
 
-      {mangas?.length > 0 ? (
-        <div
-          className='grid gap-4 
-          grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 
-          justify-items-center 
-          px-2 sm:px-6 md:px-12 lg:px-24 xl:px-32 
-          py-6 sm:py-8 md:py-10 
-          bg-zinc-900 rounded-xl min-h-screen'
-        >
-          {mangas.map(manga => (
-            <div key={manga.slug} className='w-full flex justify-center'>
-              <MangaItem manga={manga} showUpdateTime={false} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className='min-h-screen flex flex-col items-center justify-center text-slate-100 px-6 py-12'>
-          <Image
-            unoptimized
-            src={bocchi}
-            alt='Not Found'
-            width={220}
-            height={220}
-            className='rounded-lg mb-6 object-contain'
-          />
+        {mangas?.length > 0 ? (
+          <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-6 lg:gap-8'>
+            {mangas.map(manga => (
+              <MangaItem key={manga.slug} manga={manga} showUpdateTime={true} />
+            ))}
+          </div>
+        ) : (
+          <div className='min-h-[60vh] flex flex-col items-center justify-center text-center space-y-6 p-8'>
+            <Image
+              unoptimized
+              src={bocchi}
+              alt='Not Found'
+              width={220}
+              height={220}
+              className='rounded-lg mb-6 object-contain'
+            />
 
-          <h1 className='text-2xl md:text-3xl font-bold mb-3'>Không tìm thấy kết quả</h1>
-          <Link
-            href='/'
-            className='mt-3 inline-block px-5 py-2 bg-gray-700 text-white font-medium rounded-lg hover:opacity-80 transition'
-          >
-            Quay lại trang chủ
-          </Link>
-        </div>
-      )}
+            <h2 className='text-2xl md:text-3xl font-bold mb-3 text-white'>Không tìm thấy kết quả</h2>
+            <p className='text-slate-100 max-w-md mx-auto'>
+              Rất tiếc, chúng tôi không tìm thấy truyện nào phù hợp với yêu cầu của bạn. Thử tìm kiếm với từ khóa khác nhé!
+            </p>
+            <Link
+              href='/'
+              className='mt-3 inline-block px-5 py-2 bg-gray-700 text-white font-medium rounded-lg hover:opacity-80 transition'
+            >
+              Quay lại trang chủ
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

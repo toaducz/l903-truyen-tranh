@@ -73,35 +73,39 @@ function SearchPageContent() {
     setCategories(cats)
     setPage(1)
     router.push(
-      `/search?q=${encodeURIComponent(query)}&page=1&sort_field=${field}&sort_type=${type}${cats.length ? `&category=${cats.join(',')}` : ''}`
+      `/search?q=${encodeURIComponent(query)}&page=1&sort_field=${field}&sort_type=${type}${
+        cats.length ? `&category=${cats.join(',')}` : ''
+      }`
     )
   }
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
     router.push(
-      `/search?q=${encodeURIComponent(query)}&page=${newPage}&sort_field=${sortField}&sort_type=${sortType}${categories.length ? `&category=${categories.join(',')}` : ''}`
+      `/search?q=${encodeURIComponent(query)}&page=${newPage}&sort_field=${sortField}&sort_type=${sortType}${
+        categories.length ? `&category=${categories.join(',')}` : ''
+      }`
     )
   }
 
   return (
-    <div>
+    <div className='pt-24 min-h-screen bg-[#0a0a0a]'>
       {totalItems !== 0 && (
-        <div className='px-4 pt-25'>
+        <div className='px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto'>
           <SortControl
             sortField={sortField}
             sortType={sortType}
             onChange={handleSortChange}
             selectedCategories={categories}
             isCategory={false}
-          />{' '}
+          />
         </div>
       )}
 
-      <MangaListPage mangas={results?.data?.items ?? []} title={String(text)} />
+      <MangaListPage mangas={results?.data?.items ?? []} title={text} />
 
       <Pagination currentPage={pageParam} totalPages={totalPages} onPageChange={handlePageChange} />
-      <div className='text-sm italic text-white text-center pb-10'>{countText}</div>
+      <div className='text-sm italic text-zinc-400 text-center pb-10'>{countText}</div>
     </div>
   )
 }

@@ -74,23 +74,25 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
         return (
           <div
             key={index}
-            className='keen-slider__slide flex items-center justify-between px-40 shadow rounded-2xl bg-zinc-900'
+            className='keen-slider__slide flex items-center justify-between px-8 md:px-16 lg:px-24 py-8 shadow-2xl rounded-2xl bg-zinc-900/60 border border-zinc-800/50 backdrop-blur-sm'
           >
             <div
-              className={`w-2/3 pr-8 transition-all duration-700 ease-out ${
+              className={`w-full md:w-3/5 pr-8 transition-all duration-700 ease-out ${
                 currentSlide === index ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
               }`}
             >
-              <p className='text-gray-300 mb-6 line-clamp-2 italic'>Cập nhật: {updateDay}</p>
-              <h2 className='text-3xl font-bold text-white mb-3 line-clamp-2'>{title}</h2>
-              <p className='text-gray-300 mb-6 line-clamp-2 italic'>{origin_name}</p>
-              <p className='text-gray-300 mb-2 line-clamp-2'>
-                <span className='font-bold'>Thể loại: </span> {categoryNames}
-              </p>
-              <p className='text-gray-300 mb-6 line-clamp-2'>
-                <span className='font-bold'>Tình trạng: </span>{' '}
-                {MangaStatus[manga.status as keyof typeof MangaStatus] || 'Không rõ'}
-              </p>
+              <p className='text-zinc-400 mb-4 text-sm font-medium'>Cập nhật: {updateDay}</p>
+              <h2 className='text-3xl md:text-4xl lg:text-5xl  text-white mb-4 line-clamp-2 leading-tight'>{title}</h2>
+              <p className='text-zinc-400 mb-6 line-clamp-2 italic text-sm md:text-base'>{origin_name}</p>
+              <div className='flex flex-col gap-2 mb-8'>
+                <p className='text-zinc-300 line-clamp-1 text-sm md:text-base'>
+                  <span className='font-bold text-zinc-100'>Thể loại: </span> {categoryNames}
+                </p>
+                <p className='text-zinc-300 text-sm md:text-base'>
+                  <span className='font-bold text-zinc-100'>Tình trạng: </span>{' '}
+                  {MangaStatus[manga.status as keyof typeof MangaStatus] || 'Không rõ'}
+                </p>
+              </div>
               <div className='flex space-x-2'>
                 <Link
                   href={`detail-manga/${manga.slug}`}
@@ -101,7 +103,10 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
                 {hasChaptersLatest && (
                   <Link
                     href={{
-                      pathname: `/reader/${manga?.chaptersLatest[0]?.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')}`,
+                      pathname: `/reader/${manga?.chaptersLatest[0]?.chapter_api_data.replace(
+                        'https://sv1.otruyencdn.com/v1/api/chapter/',
+                        ''
+                      )}`,
                       query: {
                         slug: manga?.slug,
                         chapter_name: manga?.chaptersLatest[0]?.chapter_name ?? 'Không rõ'
@@ -115,18 +120,19 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
               </div>
             </div>
 
-            <div className='w-1/2 flex justify-end'>
-              <Image
-                src={coverImageUrl}
-                alt={title}
-                className='object-cover rounded-xl shadow-lg transition-transform duration-700 ease-in-out hover:scale-105 cursor-grabbing'
-                width={250}
-                height={400}
-                unoptimized
-                loading='lazy'
-                placeholder='blur'
-                blurDataURL={placeholder.src}
-              />
+            <div className='hidden md:flex w-2/5 justify-end'>
+              <div className='relative w-64 lg:w-72 aspect-[2/3] rounded-xl overflow-hidden shadow-2xl transition-transform duration-700 ease-in-out hover:scale-105 hover:-translate-y-2 cursor-grab active:cursor-grabbing'>
+                <Image
+                  src={coverImageUrl}
+                  alt={title}
+                  fill
+                  className='object-cover'
+                  unoptimized
+                  loading='lazy'
+                  placeholder='blur'
+                  blurDataURL={placeholder.src}
+                />
+              </div>
             </div>
           </div>
         )

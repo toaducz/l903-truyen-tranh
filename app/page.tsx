@@ -64,7 +64,7 @@ function MangaSection({ title, items, isLoading, isError, link = '/', animation 
     <section ref={sectionRef} className='pt-6 bg-zinc-900 rounded-xl'>
       <Link
         href={link}
-        className='flex items-center justify-center mb-10 font-bold text-2xl underline decoration-[3px] decoration-blue-400 cursor-pointer hover:opacity-90'
+        className='flex items-center justify-center mb-10 font-bold text-2xl underline decoration-[3px] decoration-blue-400 cursor-pointer hover:opacity-90 text-white'
       >
         {title}
       </Link>
