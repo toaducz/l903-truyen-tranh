@@ -324,8 +324,8 @@ export default function LoginPage() {
               <RiveComponent />
             </div>
 
-            <h1 className='login-title'>Chào mừng trở lại</h1>
-            <p className='login-subtitle'>Đăng nhập để tiếp tục đọc truyện</p>
+            <h1 className='login-title'>Welcome back</h1>
+            <p className='login-subtitle'>Đăng nhập để tiếp tục</p>
 
             <form onSubmit={handleLogin}>
               {/* Email */}
@@ -369,8 +369,8 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div className='login-register' onClick={() => alert('Không cho đăng kí đấy, làm sao?')}>
-              Chưa có tài khoản? <span>Đăng ký</span>
+            <div className='login-register' onClick={() => alert(':D')}>
+              <span>Đăng ký</span>
             </div>
           </div>
         )}
