@@ -20,7 +20,12 @@ export default function Navbar() {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [openMenu, setOpenMenu] = useState<'category' | null>(null)
   const MAX_SEARCH_LENGTH = 100
-  const { data: categoryData, isLoading: categoryLoading } = useQuery(getCategory())
+  const isPublicPage = pathname === '/login' || pathname === '/home'
+
+  const { data: categoryData, isLoading: categoryLoading } = useQuery({
+    ...getCategory(),
+    enabled: !isPublicPage
+  })
 
   // const { user } = useAuth()
 
