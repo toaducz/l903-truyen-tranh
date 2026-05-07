@@ -72,12 +72,13 @@ export default function Navbar() {
     { href: '#', label: 'Thể loại', dropdown: true }
   ]
 
-  if (pathname === '/login') return null
+  if (pathname === '/login' || pathname === '/home') return null
 
   return (
     <nav
-      className={`bg-slate-900 text-white shadow-md w-screen fixed top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
-        }`}
+      className={`bg-slate-900 text-white shadow-md w-screen fixed top-0 z-50 transition-transform duration-300 ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between'>
         {/* Logo */}
@@ -112,8 +113,9 @@ export default function Navbar() {
                             key={item.slug}
                             href={item.slug === 'loading' ? '#' : href}
                             onClick={() => setOpenMenu(null)}
-                            className={`block w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 ${item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
-                              }`}
+                            className={`block w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 ${
+                              item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
+                            }`}
                           >
                             {item.name}
                           </Link>
@@ -230,8 +232,9 @@ export default function Navbar() {
                               setOpenMenu(null)
                               setIsMenuOpen(false)
                             }}
-                            className={`py-1 text-sm text-slate-300 hover:text-white ${item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
-                              }`}
+                            className={`py-1 text-sm text-slate-300 hover:text-white ${
+                              item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
+                            }`}
                           >
                             {item.name}
                           </Link>
