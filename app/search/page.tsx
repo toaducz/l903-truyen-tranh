@@ -102,10 +102,9 @@ function SearchPageContent() {
         </div>
       )}
 
-      <MangaListPage mangas={results?.data?.items ?? []} title={text} />
+      <MangaListPage mangas={results?.data?.items ?? []} title={text} countText={countText} />
 
       <Pagination currentPage={pageParam} totalPages={totalPages} onPageChange={handlePageChange} />
-      <div className='text-sm italic text-zinc-400 text-center pb-10'>{countText}</div>
     </div>
   )
 }

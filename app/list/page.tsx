@@ -93,11 +93,9 @@ function ListTypePageContent() {
         </div>
       )}
 
-      <MangaListPage mangas={results?.data?.items ?? []} title={String(text)} />
+      <MangaListPage mangas={results?.data?.items ?? []} title={String(text)} countText={`Có ${totalItems} kết quả`} />
 
       <Pagination currentPage={pageParam} totalPages={totalPages} onPageChange={handlePageChange} />
-
-      <div className='text-sm italic text-white text-center pb-10'>Có {totalItems} kết quả</div>
     </div>
   )
 }

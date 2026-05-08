@@ -10,16 +10,20 @@ import Link from 'next/link'
 type MangaListPageProps = {
   mangas: Manga[]
   title?: string
+  countText?: string
 }
 
-export default function MangaListPage({ mangas, title = '' }: MangaListPageProps) {
+export default function MangaListPage({ mangas, title = '', countText = '' }: MangaListPageProps) {
   return (
     <div className='min-h-screen bg-[#0a0a0a] text-white selection:bg-blue-500/30'>
       <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12'>
         {title && (
-          <div className='flex items-center gap-4 mb-10'>
-            <div className='h-8 w-1 bg-blue-600 rounded-full'></div>
-            <h1 className='text-3xl md:text-4xl text-white'>{title}</h1>
+          <div className='flex flex-col gap-2 mb-10'>
+            <div className='flex items-center gap-4'>
+              <div className='h-8 w-1 bg-blue-600 rounded-full'></div>
+              <h1 className='text-3xl md:text-4xl text-white font-bold'>{title}</h1>
+            </div>
+            {countText && <p className='text-sm text-slate-400 italic ml-5'>{countText}</p>}
           </div>
         )}
 

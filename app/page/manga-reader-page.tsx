@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,6 +11,9 @@ import { getChapterDetailQueryOptions } from '@/lib/api/chapter/get-detail-chapt
 import ChapterNavigator from '@/component/chapter/manga-chapter-navigator'
 import { getViewBySlug, updateChapterView } from '@/lib/local-storage'
 import { toggleBookmark, checkBookmark } from '@/lib/bookmark'
+import { Chapter } from '@/lib/api/common/type'
+import { useRouter } from 'next/navigation'
+import { getDetailManga } from '@/lib/api/get-detail-manga'
 
 interface ChapterReaderScreenProps {
   url: string
@@ -19,8 +22,28 @@ interface ChapterReaderScreenProps {
 
 export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenProps) {
   const [isHorizontal, setIsHorizontal] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
+  const router = useRouter()
 
-  const { data: chapterData, isLoading, isError } = useQuery(getChapterDetailQueryOptions(url))
+  const {
+    data: chapterData,
+    isLoading: isChapterLoading,
+    isError: isChapterError
+  } = useQuery(getChapterDetailQueryOptions(url))
+  const { data: manga, isLoading: isMangaLoading } = useQuery(getDetailManga({ slug }))
+
+  const chapters = useMemo(() => manga?.data?.item?.chapters[0].server_data ?? [], [manga])
+  const currentIndex = useMemo(() => chapters.findIndex((c: Chapter) => c.chapter_api_data === url), [chapters, url])
+
+  const chapterName = chapterData?.data?.item?.chapter_name
+  const currentLabel = chapterName ? `Chapter ${chapterName}` : 'Đang tải...'
+
+  const navigateTo = (index: number) => {
+    const chapter = chapters[index]
+    if (!chapter) return
+    const link = chapter.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')
+    router.replace(`/reader/${link}?slug=${slug}`)
+  }
 
   useEffect(() => {
     if (isHorizontal) {
@@ -58,7 +81,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
     }
   }, [chapterData, slug, url])
 
-  if (isLoading) {
+  if (isChapterLoading) {
     return (
       <div className='flex items-center justify-center min-h-screen bg-[#0f172a]'>
         <Loading />
@@ -66,7 +89,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
     )
   }
 
-  if (isError || !chapterData || chapterData.status !== 'success') {
+  if (isChapterError || !chapterData || chapterData.status !== 'success') {
     return (
       <div className='flex items-center justify-center min-h-screen bg-[#0f172a]'>
         <Error />
@@ -77,55 +100,155 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
   const domain = chapterData.data?.domain_cdn
   const chapter_path = chapterData.data?.item?.chapter_path
   const chapter_image = chapterData.data?.item?.chapter_image ?? []
-  const chapterName = chapterData.data?.item?.chapter_name
 
   return (
     <div className='text-white min-h-screen flex flex-col'>
       {/* Sticky top bar */}
-      <div className='sticky top-0 z-40 bg-[#0f172a]/95 backdrop-blur-sm border-b border-slate-700/50 px-4 py-5 shrink-0'>
-        <div className='max-w-[900px] mx-auto flex items-center justify-between gap-4'>
-          {/* Back button */}
-          <Link
-            href={`/detail-manga/${slug}`}
-            className='flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors group shrink-0'
-          >
-            <svg
-              className='w-4 h-4 transition-transform group-hover:-translate-x-0.5'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
+      <div className='sticky top-0 z-40 bg-[#0f172a]/95 backdrop-blur-sm border-b border-slate-700/50 px-4 py-3 shrink-0'>
+        <div className='max-w-[1200px] mx-auto flex items-center justify-between gap-4'>
+          {/* Left section: Back button */}
+          <div className='flex items-center gap-4'>
+            <Link
+              href={`/detail-manga/${slug}`}
+              className='flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors group shrink-0'
             >
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
-            </svg>
-            <span className='hidden sm:inline'>Trang chi tiết</span>
-          </Link>
+              <svg
+                className='w-5 h-5 transition-transform group-hover:-translate-x-0.5'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+              </svg>
+              <span className='hidden md:inline font-medium'>Trở về</span>
+            </Link>
+          </div>
 
-          {/* Chapter name */}
-          {chapterName && <span className='text-sm font-semibold text-slate-200 truncate'>Chapter {chapterName}</span>}
+          {/* Middle section: Navigation */}
+          <div className='flex items-center gap-1 bg-slate-800/50 rounded-lg p-1 border border-slate-700/50'>
+            <button
+              className={`p-2 hover:bg-slate-700 rounded-md transition-colors ${
+                currentIndex <= 0 ? 'text-slate-600 cursor-not-allowed' : 'text-slate-200 cursor-pointer'
+              }`}
+              disabled={currentIndex <= 0}
+              onClick={() => navigateTo(currentIndex - 1)}
+            >
+              <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+              </svg>
+            </button>
 
-          {/* Mode toggle */}
+            <button
+              className='px-4 py-1.5 text-sm font-bold text-slate-100 hover:bg-slate-700 rounded-md transition-colors flex items-center gap-2 min-w-[120px] justify-center cursor-pointer'
+              onClick={() => setIsNavOpen(true)}
+            >
+              <span className='truncate max-w-[150px]'>{currentLabel}</span>
+              <svg className='w-4 h-4 text-slate-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
+              </svg>
+            </button>
+
+            <button
+              className={`p-2 hover:bg-slate-700 rounded-md transition-colors ${
+                currentIndex >= chapters.length - 1
+                  ? 'text-slate-600 cursor-not-allowed'
+                  : 'text-slate-200 cursor-pointer'
+              }`}
+              disabled={currentIndex < 0 || currentIndex >= chapters.length - 1}
+              onClick={() => navigateTo(currentIndex + 1)}
+            >
+              <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+              </svg>
+            </button>
+          </div>
+
+          {/* Right section: Mode toggle */}
           <button
-            className='flex items-center gap-1.5 text-xs px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0'
+            className='flex items-center gap-2 text-xs font-bold px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors cursor-pointer whitespace-nowrap'
             onClick={() => setIsHorizontal(p => !p)}
           >
             {isHorizontal ? (
               <>
-                <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 6h16M4 12h16M4 18h16' />
                 </svg>
-                Đọc dọc
+                <span className='hidden sm:inline'>Đọc dọc</span>
               </>
             ) : (
               <>
-                <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4'
+                  />
                 </svg>
-                Đọc ngang
+                <span className='hidden sm:inline'>Đọc ngang</span>
               </>
             )}
           </button>
         </div>
       </div>
+
+      {/* Chapter Selection Modal */}
+      {isNavOpen && (
+        <div
+          className='fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center pt-20 px-4'
+          onClick={() => setIsNavOpen(false)}
+        >
+          <div
+            className='bg-[#0f172a] w-full max-w-md rounded-2xl border border-slate-700 shadow-2xl flex flex-col overflow-hidden max-h-[70vh]'
+            onClick={e => e.stopPropagation()}
+          >
+            <div className='p-4 border-b border-slate-700 flex items-center justify-between bg-slate-800/50'>
+              <h3 className='font-bold text-slate-100'>Chọn chương</h3>
+              <button
+                onClick={() => setIsNavOpen(false)}
+                className='p-1.5 hover:bg-slate-700 rounded-lg transition-colors text-slate-400'
+              >
+                <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+                </svg>
+              </button>
+            </div>
+            <div className='overflow-y-auto p-2 space-y-1'>
+              {isMangaLoading ? (
+                <div className='flex justify-center py-10'>
+                  <Loading />
+                </div>
+              ) : (
+                chapters.map((item: Chapter) => {
+                  const isCurrent = item.chapter_api_data === url
+                  const link = item.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')
+                  const handleClick = () => {
+                    setIsNavOpen(false)
+                    router.push(`/reader/${link}?slug=${slug}`)
+                  }
+
+                  return (
+                    <button
+                      key={item.chapter_api_data}
+                      onClick={handleClick}
+                      className={`w-full text-left py-3 px-4 rounded-xl text-sm font-medium transition-all flex items-center justify-between group ${
+                        isCurrent ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                      }`}
+                    >
+                      <span>Chapter {item.chapter_name ?? 'Oneshot'}</span>
+                      {isCurrent && (
+                        <span className='text-[10px] font-black uppercase bg-white/20 px-1.5 py-0.5 rounded'>
+                          Đang đọc
+                        </span>
+                      )}
+                    </button>
+                  )
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {!isHorizontal && (
         <div className='max-w-[900px] w-full mx-auto pt-4 px-4 shrink-0'>
