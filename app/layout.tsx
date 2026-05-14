@@ -1,17 +1,22 @@
 import type { Metadata } from 'next'
-import { Be_Vietnam_Pro } from 'next/font/google'
+import { Inter, Manrope } from 'next/font/google'
 import './globals.css'
 import Providers from './provider'
-import { Suspense } from 'react'
-import NProgressInit from '@/component/NProgressInit'
 import Navbar from '@/component/navbar'
 import Footer from '@/component/footer'
 import { AuthProvider } from './auth-provider'
+import ScrollToTopButton from '@/component/chapter/scroll-to-top'
 
-const beVietnamPro = Be_Vietnam_Pro({
-  variable: '--font-be-vietnam-pro',
-  subsets: ['vietnamese'],
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin', 'vietnamese'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+})
+
+const manrope = Manrope({
+  variable: '--font-manrope',
+  subsets: ['latin', 'vietnamese'],
+  weight: ['200', '300', '400', '500', '600', '700', '800']
 })
 
 export const metadata: Metadata = {
@@ -31,14 +36,12 @@ export default function RootLayout({
         src='https://umami.l903.site/script.js'
         data-website-id='ee2732a0-d135-4ce4-914e-80d5da557069'
       ></script>
-      <body className={`${beVietnamPro.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${manrope.variable} font-sans antialiased`}>
         <Providers>
-          <Suspense>
-            <NProgressInit />
-          </Suspense>
           <AuthProvider>
             <Navbar />
             {children}
+            <ScrollToTopButton />
             <Footer />
           </AuthProvider>
         </Providers>

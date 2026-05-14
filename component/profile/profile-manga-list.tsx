@@ -21,7 +21,6 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
       {list.map(manga => {
         // check truyện đã có chapter đang đọc dở chưa
         const hasChapter = manga.chapter_name && manga.chapter_id
-        console.log(manga)
 
         return (
           <div key={manga.slug} className='relative w-full bg-[#181818] rounded-lg overflow-hidden group'>
@@ -33,13 +32,13 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
                 fill
                 unoptimized
                 loading='lazy'
-                className='object-cover object-center transition-opacity duration-300 group-hover:opacity-40'
+                className='object-cover object-center group-hover:opacity-40'
               />
 
-              <div className='absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10'>
+              <div className='absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 z-10'>
                 <Link
                   href={`/detail-manga/${manga.slug}`}
-                  className='bg-blue-600 hover:bg-blue-700 text-white text-sm py-1.5 px-3 rounded-md w-32 text-center transition'
+                  className='bg-blue-600 hover:bg-blue-700 text-white text-sm py-1.5 px-3 rounded-md w-32 text-center'
                 >
                   Xem thông tin
                 </Link>
@@ -47,7 +46,7 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
                 {hasChapter ? (
                   <Link
                     href={`/reader/${manga.chapter_id}?slug=${manga.slug}&chapter_name=${manga.chapter_name}`}
-                    className='bg-green-600 hover:bg-green-700 text-white text-sm py-1.5 px-3 rounded-md w-32 text-center transition'
+                    className='bg-green-600 hover:bg-green-700 text-white text-sm py-1.5 px-3 rounded-md w-32 text-center'
                     title={`Đọc tiếp ${manga.chapter_name}`}
                   >
                     Chapter {manga.chapter_name}
@@ -66,7 +65,7 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
             <div className='p-2'>
               <Link
                 href={`/detail-manga/${manga.slug}`}
-                className='block text-sm font-medium truncate hover:text-blue-400 transition-colors'
+                className='block text-sm font-medium truncate hover:text-blue-400'
                 title={manga.name}
               >
                 {manga.name}
@@ -79,13 +78,13 @@ export default function ProfileMangaList({ list, emptyText, isBookmark = false }
                 onClick={async () => {
                   try {
                     await toggleBookmark(manga, true)
-                    window.location.href = '/profile'
+                    window.location.reload()
                   } catch (err) {
                     console.error('Lỗi xóa bookmark:', err)
                   }
                 }}
                 className='absolute top-2 right-2 w-6 h-6 flex items-center justify-center 
-                 bg-red-600 text-white text-sm rounded-full hover:bg-red-700 transition cursor-pointer z-20'
+                 bg-red-600 text-white text-sm rounded-full hover:bg-red-700 cursor-pointer z-20'
               >
                 ✕
               </button>

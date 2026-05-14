@@ -219,7 +219,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
                   <Loading />
                 </div>
               ) : (
-                chapters.map((item: Chapter) => {
+                [...chapters].reverse().map((item: Chapter) => {
                   const isCurrent = item.chapter_api_data === url
                   const link = item.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')
                   const handleClick = () => {
@@ -232,12 +232,12 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
                       key={item.chapter_api_data}
                       onClick={handleClick}
                       className={`w-full text-left py-3 px-4 rounded-xl text-sm font-medium transition-all flex items-center justify-between group ${
-                        isCurrent ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        isCurrent ? 'bg-primary text-black font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                       }`}
                     >
                       <span>Chapter {item.chapter_name ?? 'Oneshot'}</span>
                       {isCurrent && (
-                        <span className='text-[10px] font-black uppercase bg-white/20 px-1.5 py-0.5 rounded'>
+                        <span className='text-[10px] font-black uppercase bg-black/20 px-1.5 py-0.5 rounded'>
                           Đang đọc
                         </span>
                       )}
@@ -246,6 +246,7 @@ export default function ChapterReaderScreen({ url, slug }: ChapterReaderScreenPr
                 })
               )}
             </div>
+
           </div>
         </div>
       )}

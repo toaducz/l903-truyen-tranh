@@ -36,15 +36,15 @@ function MangaSection({ title, items, isLoading, isError, link = '/', animation 
     animate(sectionRef.current.querySelectorAll('.manga-item'), {
       opacity: [0, 1],
       translateY: [30, 0],
-      delay: stagger(100),
-      duration: 800,
+      delay: stagger(60),
+      duration: 1000,
       easing: 'easeOutExpo'
     })
-  }, [animation])
+  }, [animation, items])
 
   if (isLoading) {
     return (
-      <section className='mt-10 flex justify-center'>
+      <section className='py-12 flex justify-center'>
         <Loading />
       </section>
     )
@@ -52,7 +52,7 @@ function MangaSection({ title, items, isLoading, isError, link = '/', animation 
 
   if (isError) {
     return (
-      <section className='mt-10 flex justify-center'>
+      <section className='py-12 flex justify-center'>
         <Error />
       </section>
     )
@@ -61,21 +61,29 @@ function MangaSection({ title, items, isLoading, isError, link = '/', animation 
   if (!items?.length) return null
 
   return (
-    <section ref={sectionRef} className='pt-6 bg-zinc-900 rounded-xl'>
-      <Link
-        href={link}
-        className='flex items-center justify-center mb-10 font-bold text-2xl underline decoration-[3px] decoration-blue-400 cursor-pointer hover:opacity-90 text-white'
-      >
-        {title}
-      </Link>
-      <div className='flex justify-center items-center'>
-        <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4'>
-          {items.map(manga => (
-            <div key={manga._id} className='manga-item'>
-              <MangaItem manga={manga} showUpdateTime={true} />
-            </div>
-          ))}
+    <section ref={sectionRef} className='py-12'>
+      <div className="flex items-center justify-between mb-8 px-2">
+        <div className="flex items-center gap-4">
+          <div className="h-8 w-1.5 bg-primary rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+          <h2 className='font-heading font-extrabold text-2xl md:text-3xl tracking-tight text-white'>
+            {title}
+          </h2>
         </div>
+        <Link
+          href={link}
+          className='text-sm font-bold text-white/40 hover:text-primary transition-colors flex items-center gap-1 group/link'
+        >
+          Xem tất cả
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover/link:translate-x-1"><path d="m9 18 6-6-6-6"/></svg>
+        </Link>
+      </div>
+      
+      <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-6'>
+        {items.map(manga => (
+          <div key={manga._id} className='manga-item'>
+            <MangaItem manga={manga} showUpdateTime={true} />
+          </div>
+        ))}
       </div>
     </section>
   )
@@ -120,48 +128,55 @@ export default function MangaPage() {
   const mangaUpdateData = mangaUpdate?.data?.items?.slice(0, 7) ?? []
 
   return (
-    <div className='p-6 pt-24 bg-black'>
-      <div className='hidden sm:block px-20'>
+    <div className='max-w-[1600px] mx-auto p-6 pt-24 md:pt-32'>
+      <div className='mb-12'>
         <HomepageSlider mangas={homePage?.data?.items} />
       </div>
-      <div className='space-y-6'>
-        <MangaSection title='TRUYỆN MỚI CẬP NHẬT' items={homePageData} link={'/list?type=truyen-moi'} />
+      
+      <div className='space-y-4'>
+        <MangaSection title='Truyện mới cập nhật' items={homePageData} link={'/list?type=truyen-moi'} animation={true} />
         <MangaSection
-          title='MANGA'
+          title='Manga'
           items={mangaData}
           isLoading={mangaLoading}
           isError={!!mangaError}
           link={'/category?category=manga'}
+          animation={true}
         />
         <MangaSection
-          title='MANHUA'
+          title='Manhua'
           items={manhuaData}
           isLoading={manhuaLoading}
           isError={!!manhuaError}
           link={'/category?category=manhua'}
+          animation={true}
         />
         <MangaSection
-          title='MANHWA'
+          title='Manhwa'
           items={manhwaData}
           isLoading={manhwaLoading}
           isError={!!manhwaError}
           link={'/category?category=manhwa'}
+          animation={true}
         />
         <MangaSection
-          title='WEBTOON'
+          title='Webtoon'
           items={webtoonData}
           isLoading={webtoonLoading}
           isError={!!webtoonError}
           link={'/category?category=webtoon'}
+          animation={true}
         />
         <MangaSection
-          title='SẮP RA MẮT'
+          title='Sắp ra mắt'
           items={mangaUpdateData}
           isLoading={mangaUpdateLoading}
           isError={!!mangaUpdateError}
           link={'/list?type=sap-ra-mat'}
+          animation={true}
         />
       </div>
     </div>
   )
 }
+

@@ -63,40 +63,55 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
   )
 
   return (
-    <div ref={sliderRef} className='keen-slider pb-8 relative overflow-hidden'>
+    <div ref={sliderRef} className='keen-slider pb-12 relative overflow-hidden group min-h-[80vh]'>
       {mangas.map((manga, index) => {
         const coverImageUrl = getImageManga(appDomain, manga.thumb_url)
         const title = manga.name || 'Không có tiêu đề'
-        const origin_name = manga.origin_name[0] ?? 'Không có mô tả'
+        const origin_name = manga.origin_name[0] ?? ''
         const categoryNames = manga.category.map(c => c.name).join(', ')
         const updateDay = formatDate(manga.updatedAt)
         const hasChaptersLatest = !!manga.chaptersLatest
         return (
           <div
             key={index}
-            className='keen-slider__slide flex items-center justify-between px-8 md:px-16 lg:px-24 py-8 shadow-2xl rounded-2xl bg-zinc-900/60 border border-zinc-800/50 backdrop-blur-sm'
+            className='keen-slider__slide flex items-center justify-between px-6 md:px-16 lg:px-24 py-12 min-h-[500px] md:min-h-[600px] rounded-[2.5rem] relative overflow-hidden border border-white/5'
           >
-            <div
-              className={`w-full md:w-3/5 pr-8 transition-all duration-700 ease-out ${
-                currentSlide === index ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
-              }`}
-            >
-              <p className='text-zinc-400 mb-4 text-sm font-medium'>Cập nhật: {updateDay}</p>
-              <h2 className='text-3xl md:text-4xl lg:text-5xl  text-white mb-4 line-clamp-2 leading-tight'>{title}</h2>
-              <p className='text-zinc-400 mb-6 line-clamp-2 italic text-sm md:text-base'>{origin_name}</p>
-              <div className='flex flex-col gap-2 mb-8'>
-                <p className='text-zinc-300 line-clamp-1 text-sm md:text-base'>
-                  <span className='font-bold text-zinc-100'>Thể loại: </span> {categoryNames}
-                </p>
-                <p className='text-zinc-300 text-sm md:text-base'>
-                  <span className='font-bold text-zinc-100'>Tình trạng: </span>{' '}
+            {/* Background Blur Image */}
+            <div className='absolute inset-0 z-0 opacity-20 blur-3xl scale-110 pointer-events-none'>
+              <Image src={coverImageUrl} alt='' fill className='object-cover' unoptimized />
+            </div>
+
+            <div className='relative z-10 w-full md:w-3/5'>
+              <div className='flex items-center gap-3 mb-6'>
+                <span className='px-3 py-1 bg-primary text-black rounded-full text-[10px] font-bold tracking-wider uppercase'>
+                  Cập nhật: {updateDay}
+                </span>
+                <span className='px-3 py-1 bg-white/10 text-white rounded-full text-[10px] font-bold tracking-wider uppercase border border-white/10'>
                   {MangaStatus[manga.status as keyof typeof MangaStatus] || 'Không rõ'}
-                </p>
+                </span>
               </div>
-              <div className='flex space-x-2'>
+
+              <h2 className='font-heading text-4xl md:text-5xl lg:text-7xl font-extrabold text-white mb-6 line-clamp-2 leading-[1.1] tracking-tight'>
+                {title}
+              </h2>
+
+              <p className='text-white/60 mb-8 line-clamp-2 font-medium text-lg max-w-xl'>{origin_name}</p>
+
+              <div className='flex flex-wrap gap-2 mb-10'>
+                {manga.category.slice(0, 4).map(cat => (
+                  <span
+                    key={cat.slug}
+                    className='px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-semibold text-white/80 hover:bg-white/10'
+                  >
+                    {cat.name}
+                  </span>
+                ))}
+              </div>
+
+              <div className='flex flex-wrap gap-4'>
                 <Link
                   href={`detail-manga/${manga.slug}`}
-                  className='bg-white hover:opacity-80 text-black px-4 py-2 rounded-lg transition cursor-pointer inline-block'
+                  className='bg-primary hover:bg-primary/90 text-black px-8 py-4 rounded-2xl font-bold text-sm transition-transform active:scale-95 shadow-lg'
                 >
                   Xem chi tiết
                 </Link>
@@ -112,7 +127,7 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
                         chapter_name: manga?.chaptersLatest[0]?.chapter_name ?? 'Không rõ'
                       }
                     }}
-                    className='bg-white hover:opacity-80 text-black px-4 py-2 rounded-lg transition cursor-pointer inline-block'
+                    className='bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-4 rounded-2xl font-bold text-sm transition-transform active:scale-95'
                   >
                     Đọc chương mới nhất
                   </Link>
@@ -121,7 +136,7 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
             </div>
 
             <div className='hidden md:flex w-2/5 justify-end'>
-              <div className='relative w-64 lg:w-72 aspect-[2/3] rounded-xl overflow-hidden shadow-2xl transition-transform duration-700 ease-in-out hover:scale-105 hover:-translate-y-2 cursor-grab active:cursor-grabbing'>
+              <div className='relative w-64 lg:w-80 aspect-[3/4.5] rounded-3xl overflow-hidden shadow-2xl border border-white/10'>
                 <Image
                   src={coverImageUrl}
                   alt={title}
@@ -137,6 +152,20 @@ export default function HomepageSlider({ mangas, appDomain = 'https://img.otruye
           </div>
         )
       })}
+
+      {/* Navigation Dots */}
+      <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20'>
+        {mangas.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentSlide(i)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              currentSlide === i ? 'w-8 bg-primary shadow-lg' : 'w-2 bg-white/20 hover:bg-white/40'
+            }`}
+          />
+        ))}
+      </div>
+
     </div>
   )
 }

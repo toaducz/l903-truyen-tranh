@@ -81,51 +81,52 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`bg-slate-900 text-white shadow-md w-screen fixed top-0 z-50 transition-transform duration-300 ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
+      className={`glass-morphism text-white shadow-xl w-full fixed top-0 z-50 transition-all duration-500 ${
+        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+      } border-x-0 border-t-0`}
     >
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between'>
         {/* Logo */}
         <Link
           href='/'
-          className='text-2xl font-bold text-white hover:text-slate-300 transition-colors duration-200 hover:scale-105'
+          className='text-2xl font-heading font-extrabold tracking-tight text-white hover:text-primary transition-all duration-300 hover:scale-105 active:scale-95'
         >
-          L903 Truyện Tranh
+          L903 <span className="text-primary">Manga</span>
         </Link>
 
         {/* Navigation - Desktop */}
-        <div className='hidden lg:flex items-center gap-8 text-base font-medium relative'>
+        <div className='hidden lg:flex items-center gap-8 text-sm font-semibold relative'>
           {navLinks.map((link, i) => {
             if (link.dropdown) {
               return (
                 <div key={i} className='relative group'>
                   <button
                     onClick={() => setOpenMenu(openMenu === 'category' ? null : 'category')}
-                    className='flex items-center gap-1 text-white hover:text-slate-300 transition-colors duration-200 cursor-pointer'
+                    className='flex items-center gap-1.5 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer'
                   >
                     {link.label}
-                    <span className='transition-transform duration-200 text-[10px] leading-none'>▼</span>
-                    <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-slate-300 transition-all duration-300 group-hover:w-full'></span>
+                    <span className={`transition-transform duration-300 text-[10px] ${openMenu === 'category' ? 'rotate-180' : ''}`}>▼</span>
                   </button>
 
                   {openMenu === 'category' && (
-                    <div className='absolute left-0 top-full mt-2 w-48 max-h-72 overflow-y-auto bg-slate-800 border border-slate-700 rounded-lg shadow-lg z-50'>
-                      {getItems().map(item => {
-                        const href = `/category?category=${item.slug}&page=1`
-                        return (
-                          <Link
-                            key={item.slug}
-                            href={item.slug === 'loading' ? '#' : href}
-                            onClick={() => setOpenMenu(null)}
-                            className={`block w-full text-left px-4 py-2 text-sm text-white hover:bg-slate-700 ${
-                              item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
-                            }`}
-                          >
-                            {item.name}
-                          </Link>
-                        )
-                      })}
+                    <div className='absolute left-1/2 -translate-x-1/2 top-full mt-4 w-64 max-h-[70vh] overflow-y-auto bg-surface/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2 animate-in fade-in zoom-in duration-200'>
+                      <div className="grid grid-cols-1 gap-1">
+                        {getItems().map(item => {
+                          const href = `/category?category=${item.slug}&page=1`
+                          return (
+                            <Link
+                              key={item.slug}
+                              href={item.slug === 'loading' ? '#' : href}
+                              onClick={() => setOpenMenu(null)}
+                              className={`block w-full px-4 py-2.5 text-sm rounded-xl transition-all duration-200 hover:bg-white/10 hover:text-primary ${
+                                item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
+                              }`}
+                            >
+                              {item.name}
+                            </Link>
+                          )
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -136,134 +137,140 @@ export default function Navbar() {
               <Link
                 key={i}
                 href={link.href}
-                className='relative text-white hover:text-slate-300 transition-colors duration-200 group'
+                className='relative text-white/80 hover:text-white transition-colors duration-200 group'
               >
                 {link.label}
-                <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-slate-300 transition-all duration-300 group-hover:w-full'></span>
+                <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full'></span>
               </Link>
             )
           })}
         </div>
 
-        {/* Search - Desktop */}
-        <form onSubmit={handleSearch} className='hidden sm:flex items-center space-x-2'>
-          <input
-            type='text'
-            placeholder='Tìm theo tên truyện'
-            className='px-4 py-2 rounded-lg bg-slate-800 text-white border border-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-600 placeholder-slate-400 text-sm'
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-          <button
-            type='submit'
-            className='px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-900 focus:ring-2 focus:ring-slate-600'
-            disabled={!search.trim()}
-          >
-            Tìm
-          </button>
-
-          {/* <Link
-            key={'user-icon'}
-            href={'/profile'}
-            className='bg-gray-700 rounded-full p-2 hover:bg-white transition duration-300'
-          >
-            <Image src={userIcon} alt='user' width={35} height={35}></Image>
-          </Link> */}
-        </form>
-
-        {/* Hamburger Menu - Mobile */}
-        <button className='lg:hidden focus:outline-none' onClick={toggleMenu} aria-label='Toggle menu'>
-          {isMenuOpen ? (
-            <span className='block w-6 h-6 relative'>
-              <span className='absolute left-0 top-1/2 w-6 h-0.5 bg-white rotate-45'></span>
-              <span className='absolute left-0 top-1/2 w-6 h-0.5 bg-white -rotate-45'></span>
-            </span>
-          ) : (
-            <Image src={menu} alt='Menu' width={24} height={24} />
-          )}
-        </button>
-        <Link
-          key={'user-icon'}
-          href={'/profile'}
-          className='bg-gray-700 rounded-full p-2 hover:bg-white transition duration-300'
-        >
-          <Image src={userIcon} alt='user' width={30} height={35}></Image>
-        </Link>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className='lg:hidden bg-slate-900 px-4 py-4 flex flex-col gap-3 text-base font-medium border-t border-slate-800'>
-          {/* Search - Mobile */}
-          <form onSubmit={handleSearch} className='flex items-center space-x-2'>
+        {/* Search & Actions - Desktop */}
+        <div className="hidden sm:flex items-center gap-4">
+          <form onSubmit={handleSearch} className='relative group'>
             <input
               type='text'
-              placeholder='Tìm theo tên truyện'
-              className='flex-1 px-4 py-2 rounded-lg bg-slate-800 text-white border border-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-600 placeholder-slate-400 text-sm'
+              placeholder='Tìm kiếm truyện...'
+              className='pl-4 pr-10 py-2 w-48 lg:w-64 rounded-full bg-surface/80 backdrop-blur-xl border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:w-80 transition-all duration-300 placeholder:text-white/40 text-sm'
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
             <button
               type='submit'
-              className='px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-900 focus:ring-2 focus:ring-slate-600'
+              className='absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-primary transition-colors disabled:opacity-30'
               disabled={!search.trim()}
             >
-              Tìm
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+          </form>
+
+          <Link
+            href='/profile'
+            className='p-1 rounded-full border-2 border-white/10 hover:border-primary transition-all duration-300 active:scale-95 overflow-hidden shadow-lg hover:shadow-primary/20'
+          >
+            <Image src={userIcon} alt='user' width={32} height={32} className="rounded-full" />
+          </Link>
+        </div>
+
+        {/* Hamburger Menu - Mobile */}
+        <div className="flex items-center gap-3 lg:hidden">
+          <Link
+            href='/profile'
+            className='p-1 rounded-full border-2 border-white/10 overflow-hidden'
+          >
+            <Image src={userIcon} alt='user' width={28} height={28} className="rounded-full" />
+          </Link>
+          <button 
+            className='bg-surface/80 backdrop-blur-xl p-2 rounded-xl border border-white/10 active:scale-90 transition-all' 
+            onClick={toggleMenu} 
+            aria-label='Toggle menu'
+          >
+            {isMenuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className='lg:hidden bg-surface/98 backdrop-blur-3xl border-t border-white/10 px-4 py-6 flex flex-col gap-6 animate-in slide-in-from-top duration-300'>
+          {/* Search - Mobile */}
+          <form onSubmit={handleSearch} className='relative'>
+            <input
+              type='text'
+              placeholder='Tìm kiếm truyện...'
+              className='w-full pl-4 pr-12 py-3 rounded-2xl bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-white/40'
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+            <button
+              type='submit'
+              className='absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-primary/20 text-primary rounded-xl'
+              disabled={!search.trim()}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </button>
           </form>
 
           {/* Navigation Items - Mobile */}
-          {navLinks.map((link, i) => {
-            if (link.dropdown) {
+          <div className="flex flex-col gap-1">
+            {navLinks.map((link, i) => {
+              if (link.dropdown) {
+                return (
+                  <div key={i} className='flex flex-col'>
+                    <button
+                      onClick={() => setOpenMenu(openMenu === 'category' ? null : 'category')}
+                      className='flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-colors text-white font-medium'
+                    >
+                      <span>{link.label}</span>
+                      <span className={`transition-transform duration-300 ${openMenu === 'category' ? 'rotate-180' : ''}`}>▼</span>
+                    </button>
+
+                    {openMenu === 'category' && (
+                      <div className='grid grid-cols-2 gap-2 p-2 ml-4 mt-2 bg-white/5 border border-white/10 rounded-2xl max-h-[40vh] overflow-y-auto'>
+                        {getItems().map(item => {
+                          const href = `/category?category=${item.slug}&page=1`
+                          return (
+                            <Link
+                              key={item.slug}
+                              href={item.slug === 'loading' ? '#' : href}
+                              onClick={() => {
+                                setOpenMenu(null)
+                                setIsMenuOpen(false)
+                              }}
+                              className={`px-3 py-2 text-sm text-white/70 hover:text-primary transition-colors ${
+                                item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
+                              }`}
+                            >
+                              {item.name}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )
+              }
+
               return (
-                <div key={i} className='flex flex-col'>
-                  <button
-                    onClick={() => setOpenMenu(openMenu === 'category' ? null : 'category')}
-                    className='flex items-center justify-between px-1 py-2 text-white hover:text-slate-300 transition-colors duration-200'
-                  >
-                    <span>{link.label}</span>
-                    <span className='text-[10px]'>▼</span>
-                  </button>
-
-                  {openMenu === 'category' && (
-                    <div className='ml-4 mt-1 border-l border-slate-700 pl-3 flex flex-col max-h-60 overflow-y-auto'>
-                      {getItems().map(item => {
-                        const href = `/category?category=${item.slug}&page=1`
-                        return (
-                          <Link
-                            key={item.slug}
-                            href={item.slug === 'loading' ? '#' : href}
-                            onClick={() => {
-                              setOpenMenu(null)
-                              setIsMenuOpen(false)
-                            }}
-                            className={`py-1 text-sm text-slate-300 hover:text-white ${
-                              item.slug === 'loading' ? 'opacity-50 pointer-events-none' : ''
-                            }`}
-                          >
-                            {item.name}
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
+                <Link
+                  key={i}
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className='px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-white font-medium'
+                >
+                  {link.label}
+                </Link>
               )
-            }
-
-            return (
-              <Link
-                key={i}
-                href={link.href}
-                onClick={() => setIsMenuOpen(false)}
-                className='px-1 py-2 text-white hover:text-slate-300 transition-colors duration-200'
-              >
-                {link.label}
-              </Link>
-            )
-          })}
+            })}
+          </div>
         </div>
       )}
     </nav>
+
   )
 }

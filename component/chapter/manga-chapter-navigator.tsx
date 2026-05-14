@@ -94,8 +94,8 @@ export default function ChapterNavigator({ slug, url, enableKeyboard = false }: 
                 <p className='mt-2 text-gray-300'>Không có chapter nào</p>
               </div>
             ) : (
-              <ul>
-                {chapters.map((item: Chapter) => {
+              <ul className="p-2 space-y-1">
+                {[...chapters].reverse().map((item: Chapter) => {
                   const isCurrent = item.chapter_api_data === url
                   const link = item.chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')
                   const handleClick = () => {
@@ -107,17 +107,21 @@ export default function ChapterNavigator({ slug, url, enableKeyboard = false }: 
                     <li
                       key={item.chapter_api_data}
                       onClick={handleClick}
-                      className={`py-2 px-3 border-b border-gray-700 text-white cursor-pointer hover:bg-slate-700 hover:opacity-80 cursor-pointer ${
-                        isCurrent ? 'bg-green-700' : ''
+                      className={`py-3 px-4 rounded-xl text-sm font-medium transition-all cursor-pointer flex items-center justify-between ${
+                        isCurrent ? 'bg-primary text-black font-bold' : 'text-slate-300 hover:bg-white/5 hover:text-white'
                       }`}
                     >
-                      <span className='block hover:opacity-80 cursor-pointer'>
-                        Chapter {item.chapter_name ?? 'Oneshot'}
-                      </span>
+                      <span>Chapter {item.chapter_name ?? 'Oneshot'}</span>
+                      {isCurrent && (
+                        <span className='text-[10px] font-black uppercase bg-black/20 px-1.5 py-0.5 rounded'>
+                          Đang đọc
+                        </span>
+                      )}
                     </li>
                   )
                 })}
               </ul>
+
             )}
           </div>
         </div>

@@ -31,6 +31,8 @@ const MangaDetailPage: React.FC = () => {
     })
   }, [manga, slug])
 
+  const [isExpanded, setIsExpanded] = React.useState(false)
+
   if (isLoading) return <Loading />
   if (isError) return <Error />
 
@@ -67,7 +69,19 @@ const MangaDetailPage: React.FC = () => {
             </div>
             <div>
               <div className='font-bold pb-2'>Nội dung:</div>
-              <div className='text-gray-100 text-base leading-relaxed'>{content}</div>
+              <div
+                className={`text-gray-100 text-base leading-relaxed ${isExpanded ? '' : 'line-clamp-5'}`}
+              >
+                {content}
+              </div>
+              {content.length > 300 && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className='text-primary text-sm font-bold mt-2 hover:underline cursor-pointer'
+                >
+                  {isExpanded ? 'Thu gọn' : 'Xem thêm'}
+                </button>
+              )}
             </div>
 
             <div>
@@ -87,19 +101,35 @@ const MangaDetailPage: React.FC = () => {
             </div>
 
             <div className='pt-4 flex flex-wrap gap-3 sm:gap-4 sm:justify-start justify-center'>
-              {chapters.length > 0 && (
+              {chapters.length > 0 && chapters[0].server_data.length > 0 && (
                 <Link
                   href={{
-                    pathname: `/reader/${manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_api_data.replace(
+                    pathname: `/reader/${chapters[0].server_data[
+                      chapters[0].server_data.length - 1
+                    ].chapter_api_data.replace('https://sv1.otruyencdn.com/v1/api/chapter/', '')}`,
+                    query: {
+                      slug: item?.slug,
+                      chapter_name: chapters[0].server_data[chapters[0].server_data.length - 1].chapter_name ?? 'Không rõ'
+                    }
+                  }}
+                  className='px-4 sm:px-5 py-2 bg-primary text-black font-bold rounded-lg hover:opacity-90 transition cursor-pointer text-sm sm:text-base shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                >
+                  Đọc mới nhất
+                </Link>
+              )}
+              {chapters.length > 0 && chapters[0].server_data.length > 0 && (
+                <Link
+                  href={{
+                    pathname: `/reader/${chapters[0].server_data[0].chapter_api_data.replace(
                       'https://sv1.otruyencdn.com/v1/api/chapter/',
                       ''
                     )}`,
                     query: {
-                      slug: manga?.data?.item?.slug,
-                      chapter_name: manga?.data?.item?.chapters[0]?.server_data[0]?.chapter_name ?? 'Không rõ'
+                      slug: item?.slug,
+                      chapter_name: chapters[0].server_data[0].chapter_name ?? 'Không rõ'
                     }
                   }}
-                  className='px-4 sm:px-5 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition cursor-pointer text-sm sm:text-base'
+                  className='px-4 sm:px-5 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition cursor-pointer text-sm sm:text-base border border-white/10'
                 >
                   Đọc từ đầu
                 </Link>
@@ -108,6 +138,7 @@ const MangaDetailPage: React.FC = () => {
                 <FavoriteButton slug={String(slug) ?? ''} image={coverImageUrl} name={title} />
               </div>
             </div>
+
           </div>
         </div>
         <MangaChaptersList chapters={chapters} slug={manga?.data?.item?.slug ?? ''} />

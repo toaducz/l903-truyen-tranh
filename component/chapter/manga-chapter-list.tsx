@@ -15,7 +15,7 @@ interface MangaChaptersListProps {
 }
 
 export default function MangaChaptersList({ chapters, slug }: MangaChaptersListProps) {
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [visibleChapters, setVisibleChapters] = useState<Chapter[]>([])
   const [page, setPage] = useState(1)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
@@ -45,31 +45,39 @@ export default function MangaChaptersList({ chapters, slug }: MangaChaptersListP
       setVisibleChapters(newData)
       setPage(nextPage)
       setIsLoadingMore(false)
-    }, 500)
+    }, 400)
+  }
+
+  const handleLoadAll = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setVisibleChapters(allChapters)
+      setIsLoadingMore(false)
+    }, 400)
   }
 
   if (chapters.length === 0) {
     return (
       <div className='flex justify-center mt-20'>
-        <span className='text-slate-400 italic'>Các chương hiện đang được update, vui lòng quay lại sau</span>
+        <span className='text-white/40 italic'>Các chương hiện đang được update, vui lòng quay lại sau</span>
       </div>
     )
   }
 
   return (
-    <section className='bg-slate-900 text-white px-3 py-4 rounded-lg'>
-      <div className='flex justify-between mb-4'>
+    <section className='bg-white/5 border border-white/10 text-white p-4 rounded-3xl'>
+      <div className='flex justify-end mb-6'>
         <select
           value={sortOrder}
           onChange={e => setSortOrder(e.target.value as 'asc' | 'desc')}
-          className='bg-slate-800 text-white p-2 rounded-md border border-slate-700 cursor-pointer'
+          className='bg-white/5 text-white text-sm font-bold px-4 py-2 rounded-xl border border-white/10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50'
         >
-          <option value='asc'>Cũ nhất</option>
-          <option value='desc'>Mới nhất</option>
+          <option value='desc' className='bg-[#0A0A0A]'>Mới nhất</option>
+          <option value='asc' className='bg-[#0A0A0A]'>Cũ nhất</option>
         </select>
       </div>
 
-      <div className='space-y-2'>
+      <div className='flex flex-col gap-2.5'>
         {visibleChapters.map(item => (
           <Link
             key={item.chapter_api_data}
@@ -80,33 +88,50 @@ export default function MangaChaptersList({ chapters, slug }: MangaChaptersListP
                 chapter_name: item.chapter_name ?? 'Không rõ'
               }
             }}
-            className='w-full block text-left p-3 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors cursor-pointer'
+            className='flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-2xl transition-all group'
           >
-            <span className='font-bold italic text-white'>
+            <span className='font-bold text-white/90 group-hover:text-primary transition-colors'>
               Chapter {item.chapter_name}
-              {item.chapter_title && <span>: {item.chapter_title}</span>}
             </span>
+            {item.chapter_title && (
+              <span className='text-xs text-white/40 truncate max-w-[300px] md:max-w-md font-medium'>
+                {item.chapter_title}
+              </span>
+            )}
           </Link>
         ))}
+      </div>
 
-        <div className='flex justify-center py-4'>
-          {isLoadingMore ? (
-            <div className='flex flex-col items-center text-slate-300'>
-              <div className='animate-spin rounded-full h-6 w-6 border-2 border-blue-400 border-t-transparent mb-2'></div>
-              <span>Đang tải thêm chapters...</span>
-            </div>
-          ) : visibleChapters.length < allChapters.length ? (
+
+      <div className='flex flex-col items-center justify-center pt-8 pb-4 gap-4'>
+        {isLoadingMore ? (
+          <div className='flex items-center gap-3 text-primary font-bold animate-pulse'>
+            <div className='w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin' />
+            <span>Đang xử lý...</span>
+          </div>
+        ) : visibleChapters.length < allChapters.length ? (
+          <div className='flex gap-3'>
             <button
               onClick={handleLoadMore}
-              className='px-4 py-2 bg-gray-700 hover:opacity-80 rounded-md text-white font-semibold cursor-pointer'
+              className='px-8 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl border border-white/10 cursor-pointer transition-all active:scale-95'
             >
               Tải thêm
             </button>
-          ) : (
-            <span className='text-slate-400 italic'>Đã tải hết các chương</span>
-          )}
-        </div>
+            <button
+              onClick={handleLoadAll}
+              className='px-8 py-2.5 bg-primary text-black font-bold rounded-xl cursor-pointer transition-all active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.2)]'
+            >
+              Tải tất cả
+            </button>
+          </div>
+        ) : (
+          <div className='flex flex-col items-center gap-2'>
+            <div className='h-px w-24 bg-white/10' />
+            <span className='text-white/30 text-xs font-bold uppercase tracking-widest'>Đã tải hết</span>
+          </div>
+        )}
       </div>
     </section>
   )
 }
+

@@ -15,15 +15,15 @@ type MangaListPageProps = {
 
 export default function MangaListPage({ mangas, title = '', countText = '' }: MangaListPageProps) {
   return (
-    <div className='min-h-screen bg-[#0a0a0a] text-white selection:bg-blue-500/30'>
-      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12'>
+    <div className='min-h-screen bg-background text-white selection:bg-primary/30'>
+      <div className='max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-10 md:pt-10'>
         {title && (
-          <div className='flex flex-col gap-2 mb-10'>
+          <div className='flex flex-col gap-2 mb-12 px-2'>
             <div className='flex items-center gap-4'>
-              <div className='h-8 w-1 bg-blue-600 rounded-full'></div>
-              <h1 className='text-3xl md:text-4xl text-white font-bold'>{title}</h1>
+              <div className='h-10 w-1.5 bg-primary rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]'></div>
+              <h1 className='font-heading text-4xl md:text-5xl font-extrabold tracking-tight text-white'>{title}</h1>
             </div>
-            {countText && <p className='text-sm text-slate-400 italic ml-5'>{countText}</p>}
+            {countText && <p className='text-sm text-white/40 font-medium ml-6'>{countText}</p>}
           </div>
         )}
 
@@ -34,23 +34,24 @@ export default function MangaListPage({ mangas, title = '', countText = '' }: Ma
             ))}
           </div>
         ) : (
-          <div className='min-h-[60vh] flex flex-col items-center justify-center text-center space-y-6 p-8'>
-            <Image
-              unoptimized
-              src={bocchi}
-              alt='Not Found'
-              width={220}
-              height={220}
-              className='rounded-lg mb-6 object-contain'
-            />
+          <div className='min-h-[50vh] flex flex-col items-center justify-center text-center p-8 mt-8'>
+            <div className='relative w-48 h-48 mb-8'>
+              <Image
+                unoptimized
+                src={bocchi}
+                alt='Not Found'
+                fill
+                className='rounded-3xl object-cover shadow-2xl grayscale'
+              />
+            </div>
 
-            <h2 className='text-2xl md:text-3xl font-bold mb-3 text-white'>Không tìm thấy kết quả</h2>
-            <p className='text-slate-100 max-w-md mx-auto'>
-              Rất tiếc, chúng tôi không tìm thấy truyện nào phù hợp với yêu cầu của bạn. Thử tìm kiếm với từ khóa khác nhé!
+            <h2 className='font-heading text-3xl font-extrabold mb-4 text-white'>Không tìm thấy kết quả</h2>
+            <p className='text-white/50 max-w-md mx-auto mb-10 font-medium leading-relaxed'>
+              Không tìm thấy truyện nào phù hợp với yêu cầu của bạn. Thử tìm kiếm với từ khóa khác nhé!
             </p>
             <Link
               href='/'
-              className='mt-3 inline-block px-5 py-2 bg-gray-700 text-white font-medium rounded-lg hover:opacity-80 transition'
+              className='px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-2xl border border-white/10 transition-all active:scale-95'
             >
               Quay lại trang chủ
             </Link>
