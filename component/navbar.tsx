@@ -91,7 +91,7 @@ export default function Navbar() {
           href='/'
           className='text-2xl font-heading font-extrabold tracking-tight text-white hover:text-primary transition-all duration-300 hover:scale-105 active:scale-95'
         >
-          L903 <span className="text-primary">Manga</span>
+          L903 <span className="text-primary">Truyện Tranh</span>
         </Link>
 
         {/* Navigation - Desktop */}
