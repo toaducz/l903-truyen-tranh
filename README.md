@@ -21,11 +21,11 @@ Một dự án web đọc truyện đơn giản được xây dựng bằng **Ne
 
 ```bash
 # Cài đặt dependencies
-npm install
+pnpm install
 
 # Chạy ở chế độ phát triển
-npm run dev
+pnpm dev
 
 # Build production
-npm run build
+pnpm build
 ```
