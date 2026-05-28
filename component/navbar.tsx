@@ -22,6 +22,8 @@ export default function Navbar() {
   const MAX_SEARCH_LENGTH = 100
   const isPublicPage = pathname === '/login' || pathname === '/home'
 
+  const mangaUrl = process.env.NEXT_PUBLIC_MANGA
+
   const { data: categoryData, isLoading: categoryLoading } = useQuery({
     ...getCategory(),
     enabled: !isPublicPage
@@ -74,7 +76,8 @@ export default function Navbar() {
     { href: { pathname: '/list', query: { type: 'sap-ra-mat', page: 1 } }, label: 'Sắp ra mắt' },
     { href: { pathname: '/list', query: { type: 'dang-phat-hanh', page: 1 } }, label: 'Đang phát hành' },
     { href: { pathname: '/list', query: { type: 'hoan-thanh', page: 1 } }, label: 'Hoàn thành' },
-    { href: '#', label: 'Thể loại', dropdown: true }
+    { href: '#', label: 'Thể loại', dropdown: true },
+    { href: `${mangaUrl}`, label: 'L903 Manga' },
   ]
 
   if (pathname === '/login' || pathname === '/home') return null
