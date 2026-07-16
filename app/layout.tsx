@@ -6,6 +6,8 @@ import Navbar from '@/component/navbar'
 import Footer from '@/component/footer'
 import { AuthProvider } from './auth-provider'
 import ScrollToTopButton from '@/component/chapter/scroll-to-top'
+import NProgressInit from '@/component/NProgressInit'
+import { Suspense } from 'react'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -40,6 +42,11 @@ export default function RootLayout({
         <Providers>
           <AuthProvider>
             <Navbar />
+
+            <Suspense fallback={null}>
+              <NProgressInit />
+            </Suspense>
+
             {children}
             <ScrollToTopButton />
             <Footer />
