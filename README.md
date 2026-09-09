@@ -1,7 +1,6 @@
 # L903 Truyện Tranh
 
-Một dự án web đọc truyện đơn giản được xây dựng bằng **Next.js** dùng [otruyenApi](https://docs.otruyenapi.com/#/)
-
+Một dự án web đọc truyện đơn giản được xây dựng bằng **Next.js**
 ## Tính năng
 
 - Đọc truyện, tìm truyện
